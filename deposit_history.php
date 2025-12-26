@@ -877,8 +877,6 @@ try {
         </div>
     </div>
 
-    <?php require_once __DIR__ . '/includes/footer.php'; ?>
-
     <script>
         // Sidebar toggle
         const sidebar = document.getElementById('sidebar');
