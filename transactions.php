@@ -1162,21 +1162,25 @@ try {
         }
         
         .transactions-table td {
-            padding: 20px 16px; /* Matching header padding */
-            border-bottom: 1px solid rgba(255,255,255,.06);
-            border-right: 1px solid rgba(255,255,255,.04); /* Very subtle column separator */
-            color: var(--slate-100);
-            font-size: 14px;
-            vertical-align: middle;
-            line-height: 1.5;
-            height: 70px; /* Fixed height untuk consistency */
-            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 8px;
+            align-items: center;
+            padding: 7px 0 7px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 13px;
+            background: none;
         }
-        
+
         .transactions-table td:last-child {
-            border-right: none;
+            border-bottom: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 12px;
+            padding-bottom: 0;
         }
-        
+
         .transactions-table tr {
             transition: background-color 0.2s ease;
         }
@@ -2061,36 +2065,35 @@ try {
             /* Convert table rows to cards */
             .transactions-table tbody tr {
                 display: block;
-                background: rgba(255, 255, 255, 0.03);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                border-radius: 12px;
-                padding: 16px;
-                margin-bottom: 16px;
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.10);
+                border-radius: 14px;
+                box-shadow: 0 2px 8px rgba(20, 184, 166, 0.07);
+                padding: 10px 8px 8px 8px;
+                margin-bottom: 18px;
                 position: relative;
-            }
-            
-            .transactions-table tbody tr:hover {
-                background: rgba(255, 255, 255, 0.05);
-                border-color: rgba(20, 184, 166, 0.3);
             }
             
             .transactions-table td {
                 display: grid;
-                grid-template-columns: 100px 1fr;
-                gap: 12px;
-                align-items: start;
-                padding: 10px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                grid-template-columns: 80px 1fr;
+                gap: 8px;
+                align-items: center;
+                padding: 7px 0 7px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+                font-size: 13px;
+                background: none;
             }
-            
+
             .transactions-table td:last-child {
                 border-bottom: none;
-                display: block;
-                text-align: center;
-                padding-top: 16px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-top: 12px;
+                padding-bottom: 0;
             }
-            
-            /* Add labels before each data */
+
             .transactions-table td::before {
                 content: attr(data-label);
                 font-weight: 600;
@@ -2098,60 +2101,29 @@ try {
                 font-size: 10px;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-                line-height: 1.4;
+                line-height: 1.3;
+                white-space: pre-line;
+                opacity: 0.95;
             }
-            
+
             .transactions-table td:last-child::before {
                 display: none;
             }
-            
-            /* Styling untuk card items */
-            .order-id {
+
+            .order-id, .service-name, .order-link, .price-cell, .quantity-cell, .date-cell {
                 font-size: 13px;
-                line-height: 1.5;
-                font-weight: 600;
-                color: var(--teal-300);
-                word-break: break-word;
-            }
-            
-            .service-name {
-                font-size: 13px;
-                line-height: 1.5;
-                word-break: break-word;
-            }
-            
-            .order-link {
-                font-size: 12px;
-                padding: 4px 10px;
-                word-break: break-all;
                 line-height: 1.4;
+                word-break: break-word;
+                color: var(--slate-100);
             }
-            
+
             .status-badge {
-                padding: 6px 12px;
+                padding: 5px 10px;
                 font-size: 11px;
                 letter-spacing: 0.5px;
                 font-weight: 500;
+                border-radius: 6px;
                 display: inline-block;
-            }
-            
-            .price-cell {
-                font-size: 13px;
-                font-weight: 600;
-                color: var(--teal-300);
-                line-height: 1.5;
-            }
-            
-            .quantity-cell {
-                font-size: 13px;
-                font-weight: 600;
-                line-height: 1.5;
-            }
-            
-            .date-cell {
-                font-size: 12px;
-                line-height: 1.5;
-                word-break: break-word;
             }
             
             .btn-detail {
