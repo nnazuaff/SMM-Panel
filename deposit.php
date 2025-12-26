@@ -2262,8 +2262,8 @@ $sectionTitle = 'Top Up Saldo';
                     // Add active class to clicked button
                     this.classList.add('active');
                     
-                    // Set amount input value
-                    amountInput.value = amount;
+                    // Set amount input value with thousand separator
+                    amountInput.value = formatNumber(amount.toString());
                     selectedAmount = amount;
                     
                     // Update final amount with unique code
@@ -2444,28 +2444,32 @@ $sectionTitle = 'Top Up Saldo';
             // Show amount error
             function showAmountError(message) {
                 const input = amountInput;
+                const inputWrapper = input.parentNode;
                 input.style.borderColor = '#ef4444';
                 
                 // Remove existing error message
-                const existingError = input.parentNode.querySelector('.error-message');
+                const formGroup = inputWrapper.parentNode;
+                const existingError = formGroup.querySelector('.error-message');
                 if (existingError) {
                     existingError.remove();
                 }
                 
-                // Add error message
+                // Add error message after input wrapper
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'error-message';
-                errorDiv.style.cssText = 'color: #ef4444; font-size: 12px; margin-top: 4px;';
+                errorDiv.style.cssText = 'color: #ef4444; font-size: 12px; margin-top: 6px; display: block; width: 100%;';
                 errorDiv.textContent = message;
-                input.parentNode.appendChild(errorDiv);
+                formGroup.insertBefore(errorDiv, inputWrapper.nextSibling);
             }
 
             // Clear amount error
             function clearAmountError() {
                 const input = amountInput;
+                const inputWrapper = input.parentNode;
                 input.style.borderColor = '';
                 
-                const existingError = input.parentNode.querySelector('.error-message');
+                const formGroup = inputWrapper.parentNode;
+                const existingError = formGroup.querySelector('.error-message');
                 if (existingError) {
                     existingError.remove();
                 }
@@ -2474,12 +2478,13 @@ $sectionTitle = 'Top Up Saldo';
             // Form validation
             function validateForm() {
                 const isAmountValid = selectedAmount >= 1000 && selectedAmount <= 200000;
-                const isFileUploaded = uploadedFile !== null;
                 
-                if (isAmountValid && isFileUploaded) {
+                if (isAmountValid) {
                     submitBtn.disabled = false;
+                    submitBtnText.textContent = 'Lanjutkan';
                 } else {
                     submitBtn.disabled = true;
+                    submitBtnText.textContent = 'Lanjutkan';
                 }
             }
 
@@ -2498,49 +2503,6 @@ $sectionTitle = 'Top Up Saldo';
                 }
                 
                 return true;
-            }
-
-            // Show amount error
-            function showAmountError(message) {
-                const input = amountInput;
-                input.style.borderColor = '#ef4444';
-                
-                // Remove existing error message
-                const existingError = input.parentNode.querySelector('.error-message');
-                if (existingError) {
-                    existingError.remove();
-                }
-                
-                // Add error message
-                const errorDiv = document.createElement('div');
-                errorDiv.className = 'error-message';
-                errorDiv.style.cssText = 'color: #ef4444; font-size: 12px; margin-top: 4px;';
-                errorDiv.textContent = message;
-                input.parentNode.appendChild(errorDiv);
-            }
-
-            // Clear amount error
-            function clearAmountError() {
-                const input = amountInput;
-                input.style.borderColor = '';
-                
-                const existingError = input.parentNode.querySelector('.error-message');
-                if (existingError) {
-                    existingError.remove();
-                }
-            }
-
-            // Form validation (for main form)
-            function validateForm() {
-                const isAmountValid = selectedAmount >= 1000 && selectedAmount <= 200000;
-                
-                if (isAmountValid) {
-                    submitBtn.disabled = false;
-                    submitBtnText.textContent = 'Lanjutkan';
-                } else {
-                    submitBtn.disabled = true;
-                    submitBtnText.textContent = 'Lanjutkan';
-                }
             }
 
             // Reset form
