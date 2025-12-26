@@ -2037,23 +2037,24 @@ try {
             }
             
             .transactions-table {
-                font-size: 10px;
-                min-width: 600px;
-                width: 600px; /* Fixed width for consistent scrolling */
+                font-size: 13px;
+                min-width: 700px;
+                width: 700px; /* Fixed width for consistent scrolling */
             }
             
             .transactions-table th,
             .transactions-table td {
-                padding: 12px 8px;
+                padding: 14px 10px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
             
             .transactions-table th {
-                font-size: 9px;
-                letter-spacing: 0.3px;
-                padding: 14px 8px;
+                font-size: 11px;
+                letter-spacing: 0.5px;
+                padding: 16px 10px;
+                font-weight: 600;
             }
             
             /* Sesuaikan lebar kolom untuk mobile */
@@ -2076,88 +2077,95 @@ try {
             .transactions-table td:nth-child(8) { text-align: center; }
             
             .order-id {
-                font-size: 9px;
-                line-height: 1.2;
+                font-size: 12px;
+                line-height: 1.3;
+                font-weight: 500;
             }
             
             .service-name {
-                font-size: 10px;
-                max-width: 120px;
+                font-size: 13px;
+                max-width: 150px;
+                line-height: 1.4;
             }
             
             .order-link {
-                font-size: 9px;
-                max-width: 100px;
-                padding: 2px 6px;
+                font-size: 12px;
+                max-width: 120px;
+                padding: 3px 8px;
             }
             
             .status-badge {
-                padding: 4px 8px;
-                font-size: 8px;
-                letter-spacing: 0.3px;
-                min-width: 60px;
+                padding: 6px 10px;
+                font-size: 11px;
+                letter-spacing: 0.5px;
+                min-width: 70px;
+                font-weight: 500;
             }
             
             .price-cell {
-                font-size: 10px;
+                font-size: 12px;
                 text-align: center;
+                font-weight: 500;
             }
             
             .quantity-cell {
-                font-size: 10px;
+                font-size: 12px;
+                font-weight: 500;
             }
             
             .date-cell {
-                font-size: 9px;
+                font-size: 11px;
+                line-height: 1.3;
             }
             
             .action-cell {
-                width: 60px;
-                min-width: 60px;
-                padding: 12px 8px !important;
+                width: 70px;
+                min-width: 70px;
+                padding: 14px 10px !important;
             }
             
             .btn-detail {
-                width: 28px;
-                height: 28px;
-                padding: 6px;
+                width: 36px;
+                height: 36px;
+                padding: 8px;
             }
             
             .btn-detail svg {
-                width: 14px;
-                height: 14px;
+                width: 18px;
+                height: 18px;
             }
             
             .pagination {
                 flex-wrap: wrap;
-                gap: 4px;
-                padding: 16px;
+                gap: 6px;
+                padding: 18px;
             }
             
             .pagination-btn {
-                padding: 6px 8px;
-                font-size: 12px;
-                min-width: 32px;
+                padding: 8px 12px;
+                font-size: 14px;
+                min-width: 38px;
+                min-height: 38px;
             }
             
             .pagination-info {
                 width: 100%;
                 text-align: center;
-                margin: 8px 0 0 0;
-                font-size: 11px;
+                margin: 10px 0 0 0;
+                font-size: 13px;
             }
             
             .empty-state {
-                padding: 40px 16px;
+                padding: 50px 20px;
             }
             
             .empty-state h3 {
-                font-size: 16px;
+                font-size: 18px;
             }
             
             .empty-state p {
-                font-size: 13px;
-                max-width: 280px;
+                font-size: 14px;
+                max-width: 300px;
             }
         }
         
@@ -2167,7 +2175,7 @@ try {
             }
             
             .page-title {
-                font-size: 16px;
+                font-size: 17px;
             }
             
             .content-area {
@@ -2175,34 +2183,35 @@ try {
             }
             
             .transactions-title h2 {
-                font-size: 18px;
+                font-size: 19px;
             }
             
             .transactions-icon {
-                width: 28px;
-                height: 28px;
+                width: 30px;
+                height: 30px;
             }
             
             .stat-item {
-                font-size: 11px;
-                padding: 6px 8px;
-                min-width: 100px;
+                font-size: 12px;
+                padding: 8px 10px;
+                min-width: 110px;
             }
             
             .transactions-table {
-                font-size: 9px;
-                min-width: 500px;
-                width: 500px;
+                font-size: 12px;
+                min-width: 650px;
+                width: 650px;
             }
             
             .transactions-table th,
             .transactions-table td {
-                padding: 10px 6px;
+                padding: 12px 8px;
             }
             
             .transactions-table th {
-                font-size: 8px;
-                padding: 12px 6px;
+                font-size: 10px;
+                padding: 14px 8px;
+                font-weight: 600;
             }
             
             /* Untuk layar sangat kecil, sembunyikan kolom target */
@@ -2229,81 +2238,88 @@ try {
             .transactions-table td:nth-child(8) { text-align: center; }
             
             .order-id {
-                font-size: 8px;
+                font-size: 11px;
+                font-weight: 500;
             }
             
             .service-name {
-                font-size: 9px;
-                max-width: 100px;
+                font-size: 12px;
+                max-width: 130px;
+                line-height: 1.3;
             }
             
             .status-badge {
-                padding: 3px 6px;
-                font-size: 7px;
-                letter-spacing: 0.2px;
-                min-width: 50px;
+                padding: 5px 8px;
+                font-size: 10px;
+                letter-spacing: 0.4px;
+                min-width: 65px;
+                font-weight: 500;
             }
             
             .price-cell {
-                font-size: 9px;
+                font-size: 11px;
                 text-align: center;
+                font-weight: 500;
             }
             
             .quantity-cell {
-                font-size: 9px;
+                font-size: 11px;
+                font-weight: 500;
             }
             
             .date-cell {
-                font-size: 8px;
+                font-size: 10px;
+                line-height: 1.3;
             }
             
             .action-cell {
-                width: 50px;
-                min-width: 50px;
-                padding: 10px 6px !important;
+                width: 65px;
+                min-width: 65px;
+                padding: 12px 8px !important;
             }
             
             .btn-detail {
-                width: 24px;
-                height: 24px;
-                padding: 4px;
+                width: 34px;
+                height: 34px;
+                padding: 7px;
             }
             
             .btn-detail svg {
-                width: 12px;
-                height: 12px;
+                width: 17px;
+                height: 17px;
             }
             
             .pagination {
-                padding: 12px;
+                padding: 16px;
             }
             
             .pagination-btn {
-                padding: 4px 6px;
-                font-size: 11px;
-                min-width: 28px;
+                padding: 7px 10px;
+                font-size: 13px;
+                min-width: 36px;
+                min-height: 36px;
             }
             
             .pagination-info {
-                font-size: 10px;
+                font-size: 12px;
             }
             
             .empty-state {
-                padding: 30px 12px;
+                padding: 40px 16px;
             }
             
             .empty-state-icon {
-                width: 48px;
-                height: 48px;
+                width: 56px;
+                height: 56px;
             }
             
             .empty-state h3 {
-                font-size: 14px;
+                font-size: 17px;
             }
             
             .empty-state p {
-                font-size: 12px;
-                max-width: 240px;
+                font-size: 14px;
+                max-width: 280px;
             }
             
             .btn-create-order {
@@ -2323,60 +2339,65 @@ try {
         
         @media (max-width: 360px) {
             .content-area {
-                padding: 8px;
+                padding: 10px;
             }
             
             .top-header {
-                padding: 8px 10px;
+                padding: 10px 12px;
             }
             
             .page-title {
-                font-size: 14px;
-            }
-            
-            .transactions-title h2 {
                 font-size: 16px;
             }
             
+            .transactions-title h2 {
+                font-size: 18px;
+            }
+            
             .transactions-table {
-                font-size: 8px;
-                min-width: 420px;
-                width: 420px;
+                font-size: 11px;
+                min-width: 600px;
+                width: 600px;
             }
             
             .transactions-table th,
             .transactions-table td {
-                padding: 8px 4px;
+                padding: 12px 7px;
             }
             
             .transactions-table th {
-                font-size: 7px;
-                padding: 10px 4px;
+                font-size: 10px;
+                padding: 14px 7px;
+                font-weight: 600;
             }
             
             .stat-item {
-                font-size: 10px;
-                padding: 4px 6px;
-                min-width: 80px;
+                font-size: 11px;
+                padding: 7px 9px;
+                min-width: 100px;
             }
             
             .order-id {
-                font-size: 7px;
+                font-size: 10px;
+                font-weight: 500;
             }
             
             .service-name {
-                font-size: 8px;
-                max-width: 80px;
+                font-size: 11px;
+                max-width: 110px;
+                line-height: 1.3;
             }
             
             .status-badge {
-                padding: 2px 4px;
-                font-size: 6px;
-                min-width: 40px;
+                padding: 4px 7px;
+                font-size: 9px;
+                min-width: 60px;
+                font-weight: 500;
             }
             
             .price-cell, .quantity-cell, .date-cell {
-                font-size: 8px;
+                font-size: 10px;
+                font-weight: 500;
             }
             
             .price-cell {
@@ -2384,43 +2405,44 @@ try {
             }
             
             .action-cell {
-                width: 40px;
-                min-width: 40px;
-                padding: 8px 4px !important;
+                width: 60px;
+                min-width: 60px;
+                padding: 12px 7px !important;
             }
             
             .btn-detail {
-                width: 20px;
-                height: 20px;
-                padding: 2px;
+                width: 32px;
+                height: 32px;
+                padding: 6px;
             }
             
             .btn-detail svg {
-                width: 10px;
-                height: 10px;
+                width: 16px;
+                height: 16px;
             }
             
             .pagination-btn {
-                padding: 3px 5px;
-                font-size: 10px;
-                min-width: 24px;
+                padding: 6px 9px;
+                font-size: 12px;
+                min-width: 34px;
+                min-height: 34px;
             }
             
             .pagination-info {
-                font-size: 9px;
+                font-size: 11px;
             }
             
             .empty-state {
-                padding: 20px 8px;
+                padding: 35px 14px;
             }
             
             .empty-state h3 {
-                font-size: 13px;
+                font-size: 16px;
             }
             
             .empty-state p {
-                font-size: 11px;
-                max-width: 200px;
+                font-size: 13px;
+                max-width: 260px;
             }
         }
         
