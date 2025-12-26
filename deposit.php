@@ -1495,6 +1495,20 @@ $sectionTitle = 'Top Up Saldo';
         .sidebar-overlay.show {
             display: block;
         }
+        
+        /* Loading Animation */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -2547,21 +2561,66 @@ $sectionTitle = 'Top Up Saldo';
             }
 
             // Handle QRIS form submission
-            function handleQrisSubmit() {
+            async function handleQrisSubmit() {
                 if (!uploadedFile) {
                     showNotification('error', 'Bukti transfer diperlukan', 'Harap upload bukti transfer Anda');
                     return;
                 }
                 
-                // Show success notification
-                showNotification('success', 'Deposit berhasil dikirim', 
-                    `Deposit sebesar Rp ${selectedAmount.toLocaleString('id-ID')} (Total transfer: Rp ${finalAmountWithCode.toLocaleString('id-ID')}) telah dikirim untuk verifikasi. Saldo akan masuk dalam 1x24 jam.`);
+                // Disable button and show loading
+                qrisConfirmBtn.disabled = true;
+                qrisConfirmBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                    <span>Mengirim...</span>
+                `;
                 
-                // Close modal and reset form
-                closeQrisModal();
-                setTimeout(() => {
-                    resetForm();
-                }, 1000);
+                try {
+                    // Send deposit request to API
+                    const response = await fetch('api/deposit.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'create_deposit',
+                            amount: selectedAmount,
+                            unique_code: uniqueCode,
+                            final_amount: finalAmountWithCode,
+                            payment_method: 'qris'
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        // Show success notification
+                        showNotification('success', 'Deposit berhasil dikirim', 
+                            `Deposit sebesar Rp ${selectedAmount.toLocaleString('id-ID')} (Total transfer: Rp ${finalAmountWithCode.toLocaleString('id-ID')}) telah dikirim untuk verifikasi. Saldo akan masuk dalam 1x24 jam.`);
+                        
+                        // Close modal and reset form
+                        closeQrisModal();
+                        setTimeout(() => {
+                            resetForm();
+                        }, 1000);
+                    } else {
+                        showNotification('error', 'Gagal mengirim deposit', data.message || 'Terjadi kesalahan saat memproses deposit');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showNotification('error', 'Kesalahan', 'Terjadi kesalahan saat mengirim deposit. Silakan coba lagi.');
+                } finally {
+                    // Re-enable button
+                    qrisConfirmBtn.disabled = false;
+                    qrisConfirmBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Konfirmasi Pembayaran</span>
+                    `;
+                }
             }
 
             // Amount validation
