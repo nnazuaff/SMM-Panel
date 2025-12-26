@@ -1702,13 +1702,12 @@ $sectionTitle = 'Top Up Saldo';
                                     <div class="input-with-prefix">
                                         <span class="input-prefix">Rp</span>
                                         <input 
-                                            type="number" 
+                                            type="text" 
                                             id="amount" 
                                             name="amount" 
                                             class="form-input with-prefix" 
                                             placeholder="0" 
-                                            min="1000" 
-                                            max="200000"
+                                            inputmode="numeric"
                                         >
                                     </div>
                                     <div class="amount-limits">
@@ -1761,6 +1760,7 @@ $sectionTitle = 'Top Up Saldo';
                                         name="acisUsername" 
                                         class="form-input" 
                                         placeholder="Masukkan username AcisPayment Anda"
+                                        required
                                     >
                                     <div class="input-hint">Username yang terdaftar di aplikasi AcisPayment</div>
                                 </div>
@@ -1779,6 +1779,10 @@ $sectionTitle = 'Top Up Saldo';
                                         class="form-input" 
                                         placeholder="08xxxxxxxxxx"
                                         pattern="[0-9]{10,13}"
+                                        inputmode="numeric"
+                                        required
+                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                     >
                                     <div class="input-hint">Nomor HP yang terdaftar di AcisPayment</div>
                                 </div>
@@ -1797,6 +1801,8 @@ $sectionTitle = 'Top Up Saldo';
                                         name="email" 
                                         class="form-input" 
                                         placeholder="email@example.com"
+                                        required
+                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                                     >
                                     <div class="input-hint">Email yang terdaftar di AcisPayment</div>
                                 </div>
@@ -1809,13 +1815,13 @@ $sectionTitle = 'Top Up Saldo';
                                     <div class="input-with-prefix">
                                         <span class="input-prefix">Rp</span>
                                         <input 
-                                            type="number" 
+                                            type="text" 
                                             id="conversionAmount" 
                                             name="conversionAmount" 
                                             class="form-input with-prefix" 
                                             placeholder="0"
-                                            min="1000"
-                                            max="10000000"
+                                            inputmode="numeric"
+                                            required
                                         >
                                     </div>
                                     <div class="amount-limits">
@@ -2130,10 +2136,18 @@ $sectionTitle = 'Top Up Saldo';
                 const username = acisUsernameInput.value.trim();
                 const phone = phoneNumberInput.value.trim();
                 const email = emailInput.value.trim();
-                const amount = parseFloat(conversionAmountInput.value) || 0;
+                const amountRaw = conversionAmountInput.value.replace(/\./g, '');
+                const amount = parseFloat(amountRaw) || 0;
+                
+                // Email validation regex
+                const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+                const isEmailValid = emailRegex.test(email);
+                
+                // Phone validation (10-13 digits)
+                const isPhoneValid = /^[0-9]{10,13}$/.test(phone);
                 
                 // All fields required and amount valid
-                const isValid = username && phone && email && amount >= 1000 && amount <= 10000000;
+                const isValid = username && phone && isPhoneValid && email && isEmailValid && amount >= 1000 && amount <= 10000000;
                 submitBtn.disabled = !isValid;
             }
             
@@ -2141,7 +2155,48 @@ $sectionTitle = 'Top Up Saldo';
             acisUsernameInput.addEventListener('input', validateConversionForm);
             phoneNumberInput.addEventListener('input', validateConversionForm);
             emailInput.addEventListener('input', validateConversionForm);
-            conversionAmountInput.addEventListener('input', validateConversionForm);
+            
+            // Format number with thousand separator
+            function formatNumber(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+            
+            // Handle conversion amount input with formatting
+            conversionAmountInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\./g, ''); // Remove existing dots
+                value = value.replace(/[^0-9]/g, ''); // Remove non-numeric
+                
+                if (value) {
+                    e.target.value = formatNumber(value);
+                }
+                validateConversionForm();
+            });
+            
+            // Handle QRIS amount input with formatting
+            amountInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\./g, ''); // Remove existing dots
+                value = value.replace(/[^0-9]/g, ''); // Remove non-numeric
+                
+                if (value) {
+                    const numValue = parseInt(value);
+                    e.target.value = formatNumber(value);
+                    selectedAmount = numValue;
+                    
+                    // Remove active from quick buttons
+                    quickAmounts.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Update final amount
+                    updateFinalAmount(numValue);
+                    
+                    // Validate
+                    validateAmount(numValue);
+                    validateForm();
+                } else {
+                    selectedAmount = 0;
+                    uniqueCodeSection.style.display = 'none';
+                    validateForm();
+                }
+            });
 
             // Generate unique code based on user ID and timestamp
             function generateUniqueCode() {
@@ -2219,23 +2274,7 @@ $sectionTitle = 'Top Up Saldo';
                 });
             });
 
-            // Custom amount input
-            amountInput.addEventListener('input', function() {
-                const amount = parseInt(this.value) || 0;
-                selectedAmount = amount;
-                
-                // Remove active class from quick amount buttons
-                quickAmounts.forEach(btn => btn.classList.remove('active'));
-                
-                // Update final amount with unique code
-                updateFinalAmount(amount);
-                
-                // Validate amount
-                validateAmount(amount);
-                
-                // Validate form
-                validateForm();
-            });
+            // Custom amount input - REMOVED (sudah di-handle di atas dengan formatting)
 
             // Submit button handler (handles both QRIS and conversion)
             submitBtn.addEventListener('click', function() {
