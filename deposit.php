@@ -1837,7 +1837,7 @@ $sectionTitle = 'Top Up Saldo';
                                             <line x1="12" y1="16" x2="12" y2="12" stroke-width="2"/>
                                             <line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2"/>
                                         </svg>
-                                        Biaya konversi <strong>0,7%</strong> ditanggung user. Contoh: input Rp 1.000 → Anda transfer <strong>Rp 1.007</strong> dari AcisPayment → Saldo masuk ke SMM Panel <strong>Rp 1.000</strong>
+                                        Biaya konversi <strong>0,7%</strong>
                                     </div>
                                     
                                     <!-- Conversion Summary (shown after input) -->
