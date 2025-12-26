@@ -705,22 +705,21 @@ try {
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
+            background: var(--teal-500);
             border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
+            border-radius: 6px;
+            padding: 10px 20px;
             color: white;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             text-decoration: none;
             display: inline-block;
         }
         
         .btn-primary:hover {
-            background: linear-gradient(135deg, #0d9488, #0f766e);
-            transform: translateY(-1px);
+            background: var(--teal-600);
         }
         
         /* Filter Section */
