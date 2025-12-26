@@ -150,6 +150,41 @@ try {
             ]);
             break;
             
+        case 'confirm_payment':
+            // User confirms that they have made the payment
+            // This will be used for manual verification by admin
+            if (!isset($input['deposit_id']) || empty($input['deposit_id'])) {
+                echo json_encode(['success' => false, 'message' => 'Deposit ID harus diisi']);
+                exit();
+            }
+            
+            $depositId = intval($input['deposit_id']);
+            
+            // Verify deposit belongs to user
+            $deposit = getDepositById($depositId);
+            if (!$deposit || $deposit['user_id'] != $user['id']) {
+                echo json_encode(['success' => false, 'message' => 'Deposit tidak ditemukan']);
+                exit();
+            }
+            
+            if ($deposit['status'] != 'pending') {
+                echo json_encode(['success' => false, 'message' => 'Deposit sudah diproses']);
+                exit();
+            }
+            
+            // Update deposit with confirmation flag (can add a new column for this)
+            // For now, just return success - admin will verify manually
+            echo json_encode([
+                'success' => true,
+                'message' => 'Konfirmasi pembayaran berhasil. Deposit Anda akan segera diverifikasi oleh admin.',
+                'deposit' => [
+                    'id' => $deposit['id'],
+                    'amount' => floatval($deposit['amount']),
+                    'status' => $deposit['status']
+                ]
+            ]);
+            break;
+        
         default:
             echo json_encode(['success' => false, 'message' => 'Invalid action']);
             break;

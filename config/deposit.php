@@ -180,3 +180,128 @@ function expireOldDeposits() {
         return ['success' => false];
     }
 }
+
+/**
+ * Approve deposit and update user balance
+ * @param int $depositId Deposit ID
+ * @param int $processedBy Admin user ID (optional)
+ * @param string $adminNotes Admin notes (optional)
+ * @return array Result with success status and message
+ */
+function approveDeposit($depositId, $processedBy = null, $adminNotes = '') {
+    $pdo = getDBConnection();
+    if (!$pdo) {
+        return ['success' => false, 'message' => 'Database connection failed'];
+    }
+    
+    try {
+        // Start transaction
+        $pdo->beginTransaction();
+        
+        // Get deposit info
+        $stmt = $pdo->prepare("SELECT * FROM deposits WHERE id = ? AND status = 'pending' FOR UPDATE");
+        $stmt->execute([$depositId]);
+        $deposit = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$deposit) {
+            $pdo->rollBack();
+            return ['success' => false, 'message' => 'Deposit tidak ditemukan atau sudah diproses'];
+        }
+        
+        // Check if expired
+        if (strtotime($deposit['expired_at']) < time()) {
+            $pdo->rollBack();
+            return ['success' => false, 'message' => 'Deposit sudah kadaluarsa'];
+        }
+        
+        // Update deposit status
+        $stmt = $pdo->prepare("UPDATE deposits SET status = 'success', processed_by = ?, processed_at = NOW(), admin_notes = ?, updated_at = NOW() WHERE id = ?");
+        $stmt->execute([$processedBy, $adminNotes, $depositId]);
+        
+        // Update user balance
+        $amount = floatval($deposit['amount']);
+        $stmt = $pdo->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
+        $stmt->execute([$amount, $deposit['user_id']]);
+        
+        // Update user_balance table if exists
+        try {
+            $stmt = $pdo->prepare("INSERT INTO user_balance (user_id, balance, total_spent) VALUES (?, ?, 0) ON DUPLICATE KEY UPDATE balance = balance + ?");
+            $stmt->execute([$deposit['user_id'], $amount, $amount]);
+        } catch (PDOException $e) {
+            // Table might not exist, ignore
+        }
+        
+        // Commit transaction
+        $pdo->commit();
+        
+        return [
+            'success' => true, 
+            'message' => 'Deposit berhasil disetujui dan saldo telah ditambahkan',
+            'amount_added' => $amount
+        ];
+        
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        error_log('Approve deposit error: ' . $e->getMessage());
+        return ['success' => false, 'message' => 'Gagal approve deposit: ' . $e->getMessage()];
+    }
+}
+
+/**
+ * Reject deposit
+ * @param int $depositId Deposit ID
+ * @param int $processedBy Admin user ID (optional)
+ * @param string $adminNotes Rejection reason
+ * @return array Result
+ */
+function rejectDeposit($depositId, $processedBy = null, $adminNotes = '') {
+    $pdo = getDBConnection();
+    if (!$pdo) {
+        return ['success' => false, 'message' => 'Database connection failed'];
+    }
+    
+    try {
+        $stmt = $pdo->prepare("UPDATE deposits SET status = 'failed', processed_by = ?, processed_at = NOW(), admin_notes = ?, updated_at = NOW() WHERE id = ? AND status = 'pending'");
+        $stmt->execute([$processedBy, $adminNotes, $depositId]);
+        
+        if ($stmt->rowCount() > 0) {
+            return ['success' => true, 'message' => 'Deposit ditolak'];
+        } else {
+            return ['success' => false, 'message' => 'Deposit tidak ditemukan atau sudah diproses'];
+        }
+    } catch (PDOException $e) {
+        error_log('Reject deposit error: ' . $e->getMessage());
+        return ['success' => false, 'message' => 'Gagal reject deposit'];
+    }
+}
+
+/**
+ * Get deposit by ID
+ * @param int $depositId Deposit ID
+ * @return array|null Deposit data or null
+ */
+function getDepositById($depositId) {
+    $pdo = getDBConnection();
+    if (!$pdo) {
+        return null;
+    }
+    
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM deposits WHERE id = ?");
+        $stmt->execute([$depositId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log('Get deposit error: ' . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Auto-approve deposit based on payment proof (optional - untuk otomatis)
+ * This can be called after successful payment verification
+ * @param int $depositId Deposit ID
+ * @return array Result
+ */
+function autoApproveDeposit($depositId) {
+    return approveDeposit($depositId, null, 'Auto-approved by system');
+}
