@@ -2658,18 +2658,6 @@ try {
                     <div class="transactions-title">
                     </div>
                     
-                    <div class="transactions-stats">
-                        <div class="stat-item">
-                            <span>Total:</span>
-                            <span class="stat-number"><?= number_format($paginationInfo['total']); ?></span>
-                        </div>
-                        <?php if ($paginationInfo['total'] > 0): ?>
-                        <div class="stat-item">
-                            <span>Halaman:</span>
-                            <span class="stat-number"><?= $paginationInfo['current_page']; ?>/<?= $paginationInfo['total_pages']; ?></span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
                 </div>
                 
                 <!-- Filter Section -->
