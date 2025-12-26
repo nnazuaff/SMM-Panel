@@ -332,11 +332,8 @@ function buyService(serviceId, serviceName) {
     const isLoggedIn = <?php echo json_encode(isset($_SESSION['user']) && $_SESSION['user']); ?>;
     
     if (!isLoggedIn) {
-        // Redirect to login page with return URL
-        const loginUrl = new URL('auth/login.php', window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/'));
-        loginUrl.searchParams.set('return', window.location.pathname + window.location.search);
-        loginUrl.searchParams.set('message', 'Silakan login terlebih dahulu untuk melakukan pemesanan');
-        window.location.href = loginUrl.toString();
+        // Redirect to login page
+        window.location.href = 'auth/login.php';
         return;
     }
     
