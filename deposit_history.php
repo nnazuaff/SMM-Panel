@@ -38,7 +38,7 @@ $whereConditions = ['user_id = ?'];
 $params = [$user['id']];
 
 // Year filter
-if (!empty($filterYear) && is_numeric($filterYear)) {
+if ($filterYear !== '' && is_numeric($filterYear)) {
     $whereConditions[] = 'YEAR(created_at) = ?';
     $params[] = intval($filterYear);
 }
@@ -784,6 +784,20 @@ try {
             font-size: 14px;
             font-family: 'Poppins', sans-serif;
             transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .filter-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+        
+        .filter-select:hover {
+            border-color: rgba(20, 184, 166, 0.3);
+            background-color: rgba(255, 255, 255, 0.06);
         }
         
         .filter-select:focus,
@@ -791,11 +805,24 @@ try {
             outline: none;
             border-color: var(--teal-500);
             background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
         }
         
         .filter-select option {
             background: var(--navy-800);
             color: var(--slate-100);
+            padding: 8px;
+        }
+        
+        .filter-select option:hover,
+        .filter-select option:checked {
+            background: var(--teal-500);
+            color: white;
+        }
+        
+        .filter-select option:checked {
+            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
+            font-weight: 600;
         }
         
         .filter-btn {
