@@ -270,7 +270,14 @@ try {
                 /* ----------------------------------------------
                  * 2. Transaksi murni untuk pengurangan saldo + insert order
                  * ---------------------------------------------- */
+                require_once __DIR__ . '/../config/balance_log.php';
+                
                 $pdo->beginTransaction();
+
+                // Get balance before transaction
+                $stmt = $pdo->prepare('SELECT balance FROM user_balance WHERE user_id = ? LIMIT 1');
+                $stmt->execute([$user['id']]);
+                $balanceBefore = (float)($stmt->fetchColumn() ?? 0);
 
                 // Atomic balance deduction (hindari race condition)
                 // Ensure exact precision by using rounded total_price
@@ -306,6 +313,9 @@ try {
                     ]);
                     exit();
                 }
+                
+                // Get balance after deduction
+                $balanceAfter = $balanceBefore - $deductAmount;
 
     // IMPORTANT: Validate provider order ID before saving
     if ($providerOrderId && is_numeric($providerOrderId)) {
@@ -351,6 +361,18 @@ try {
                     error_log("Provider ID value: '$providerOrderId'");
                 }
                 error_log("===========================");
+                
+                // Log balance transaction for order
+                $orderDescription = "Pesanan #{$internalOrderId} - {$service['name']} ({$quantity}x)";
+                log_balance_transaction(
+                    $user['id'],
+                    'order',
+                    -$deductAmount, // Negative for deduction
+                    $balanceBefore,
+                    $balanceAfter,
+                    $orderDescription,
+                    $internalOrderId
+                );
 
                 if ($pdo->inTransaction()) { $pdo->commit(); }
 
