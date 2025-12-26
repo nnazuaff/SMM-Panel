@@ -124,6 +124,16 @@ try {
             min-height: 100vh;
         }
         
+        /* Global font smoothing */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
         /* Sidebar Enhanced - SAMA PERSIS */
         .sidebar {
             width: 280px;
@@ -712,10 +722,12 @@ try {
             color: white;
             font-size: 14px;
             font-weight: 600;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
             display: inline-block;
+            letter-spacing: 0.02em;
         }
         
         .btn-primary:hover {
