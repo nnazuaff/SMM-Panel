@@ -1214,7 +1214,9 @@ $sectionTitle = 'Top Up Saldo';
             padding: 12px 24px;
             border-radius: 8px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            letter-spacing: 0.3px;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
@@ -1222,6 +1224,8 @@ $sectionTitle = 'Top Up Saldo';
             gap: 8px;
             position: relative;
             overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .qris-btn::before {
