@@ -1112,77 +1112,44 @@ try {
         }
         
         .transactions-container {
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: var(--radius-md);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
             overflow: hidden;
-            width: 100%;
-            margin: 0 auto;
+            backdrop-filter: blur(10px);
         }
         
         .transactions-table-wrapper {
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            /* Smooth scrolling untuk mobile */
-            scroll-behavior: smooth;
-            border-radius: 12px;
-            /* Memastikan wrapper tidak melebihi container */
-            max-width: 100%;
-            width: 100%;
         }
         
         .transactions-table {
             width: 100%;
             border-collapse: collapse;
-            table-layout: fixed;
-            min-width: 900px; /* Increased for better spacing */
-            background: transparent;
+        }
+        
+        .transactions-table th,
+        .transactions-table td {
+            padding: 16px 24px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .transactions-table th {
-            background: rgba(255,255,255,.08); /* Slightly more prominent */
-            color: var(--slate-100); /* Brighter text */
-            font-weight: 700; /* Bolder font */
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--slate-300);
             font-size: 13px;
-            padding: 20px 16px; /* More generous padding */
-            border-bottom: 2px solid rgba(255,255,255,.12); /* Stronger border */
-            white-space: nowrap;
-            position: sticky;
-            top: 0;
-            z-index: 1;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border-right: 1px solid rgba(255,255,255,.06); /* Subtle column separator */
-            vertical-align: middle;
+            letter-spacing: 0.5px;
         }
         
-        .transactions-table th:last-child {
-            border-right: none;
+        .transactions-table tbody tr {
+            transition: all 0.2s ease;
         }
         
-        .transactions-table td {
-            padding: 20px 16px; /* Matching header padding */
-            border-bottom: 1px solid rgba(255,255,255,.06);
-            border-right: 1px solid rgba(255,255,255,.04); /* Very subtle column separator */
-            color: var(--slate-100);
-            font-size: 14px;
-            vertical-align: middle;
-            line-height: 1.5;
-            height: 70px; /* Fixed height untuk consistency */
-            box-sizing: border-box;
-        }
-        
-        .transactions-table td:last-child {
-            border-right: none;
-        }
-        
-        .transactions-table tr {
-            transition: background-color 0.2s ease;
-        }
-        
-        .transactions-table tr:hover {
-            background: rgba(255,255,255,.03); /* Subtle hover effect */
+        .transactions-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
         }
         
         .order-id {
