@@ -118,20 +118,28 @@ try {
     <link rel="stylesheet" href="css/style-v2.css">
     
     <style>
-        /* Dashboard Layout - SAMA PERSIS DENGAN DEPOSIT.PHP */
-        .dashboard-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-        
-        /* Global font smoothing */
+        /* Global responsive improvements */
         * {
+            box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
         
+        html {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        
         body {
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Dashboard Layout - SAMA PERSIS DENGAN DEPOSIT.PHP */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
         }
         
         /* Sidebar Enhanced - SAMA PERSIS */
@@ -446,6 +454,46 @@ try {
         
         .profile-menu.show {
             display: block;
+        }
+        
+        /* Mobile specific styles for profile menu */
+        @media (max-width: 768px) {
+            .profile-menu {
+                right: -10px;
+                min-width: 260px;
+                max-width: calc(100vw - 32px);
+                border-radius: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .profile-menu {
+                right: -15px;
+                min-width: 240px;
+                max-width: calc(100vw - 24px);
+            }
+            
+            .profile-menu-header {
+                padding: 12px 16px;
+            }
+            
+            .profile-details h4 {
+                font-size: 13px;
+            }
+            
+            .profile-details p {
+                font-size: 11px;
+            }
+            
+            .balance-info {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+            
+            .profile-menu-item {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
         }
         
         .profile-menu-header {
@@ -1152,10 +1200,61 @@ try {
             cursor: not-allowed;
         }
         
-        /* Mobile Responsive - SAMA PERSIS */
+        /* Mobile Responsive - ENHANCED FOR ALL DEVICES */
+        @media (max-width: 1200px) {
+            .content-area {
+                padding: 20px;
+            }
+            
+            .deposit-history-header {
+                margin-bottom: 20px;
+            }
+            
+            .deposit-history-header h2 {
+                font-size: 24px;
+            }
+            
+            .deposits-table {
+                font-size: 12px;
+            }
+            
+            .deposits-table th,
+            .deposits-table td {
+                padding: 14px 20px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .content-area {
+                padding: 18px;
+            }
+            
+            .top-header {
+                padding: 14px 18px;
+            }
+            
+            .page-title {
+                font-size: 20px;
+            }
+            
+            .deposit-history-header h2 {
+                font-size: 22px;
+            }
+            
+            .deposits-table {
+                font-size: 11px;
+            }
+            
+            .deposits-table th,
+            .deposits-table td {
+                padding: 12px 16px;
+            }
+        }
+        
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
+                width: 280px; /* Maintain width for smooth animation */
             }
             
             .sidebar.show {
@@ -1164,59 +1263,268 @@ try {
             
             .main-content {
                 margin-left: 0;
-            }
-            
-            .content-area {
-                padding: 16px;
-            }
-            
-            .deposits-table th,
-            .deposits-table td {
-                padding: 12px 16px;
-                font-size: 13px;
-            }
-            
-            .deposits-table th:nth-child(3),
-            .deposits-table td:nth-child(3) {
-                display: none;
-            }
-            
-            .filter-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .filter-search-group {
-                flex-direction: column;
-            }
-            
-            .filter-btn {
                 width: 100%;
-                justify-content: center;
             }
-        }
-        
-        @media (max-width: 480px) {
+            
+            .top-header {
+                padding: 12px 16px;
+                position: sticky;
+                top: 0;
+                z-index: 9999;
+            }
+            
             .page-title {
                 font-size: 18px;
             }
             
+            .content-area {
+                padding: 16px;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .deposit-history-header {
+                margin-bottom: 16px;
+            }
+            
+            .deposit-history-header h2 {
+                font-size: 20px;
+            }
+            
+            .deposits-table-card {
+                border-radius: 8px;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 8px;
+            }
+            
+            .deposits-table {
+                font-size: 13px;
+                min-width: 700px;
+            }
+            
             .deposits-table th,
             .deposits-table td {
-                padding: 10px 12px;
+                padding: 12px 10px;
+                white-space: nowrap;
+            }
+            
+            .deposits-table th {
+                font-size: 11px;
+                padding: 14px 10px;
+            }
+            
+            .deposit-id {
                 font-size: 12px;
             }
             
-            .deposits-table th:nth-child(4),
-            .deposits-table td:nth-child(4) {
-                display: none;
+            .deposit-amount {
+                font-size: 12px;
             }
             
-            .filter-section {
+            .deposit-code {
+                font-size: 11px;
+            }
+            
+            .payment-method {
+                font-size: 11px;
+                padding: 3px 8px;
+            }
+            
+            .deposit-status {
+                font-size: 11px;
+                padding: 3px 10px;
+            }
+            
+            .deposit-date {
+                font-size: 11px;
+            }
+            
+            .pagination {
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 18px;
+            }
+            
+            .pagination-btn {
+                padding: 8px 12px;
+                font-size: 14px;
+                min-width: 38px;
+                min-height: 38px;
+            }
+            
+            .no-deposits {
+                padding: 40px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .top-header {
+                padding: 10px 12px;
+            }
+            
+            .page-title {
+                font-size: 17px;
+            }
+            
+            .content-area {
+                padding: 12px;
+            }
+            
+            .deposit-history-header h2 {
+                font-size: 19px;
+            }
+            
+            .deposit-history-header p {
+                font-size: 13px;
+            }
+            
+            .deposits-table {
+                font-size: 12px;
+                min-width: 650px;
+            }
+            
+            .deposits-table th,
+            .deposits-table td {
+                padding: 10px 8px;
+            }
+            
+            .deposits-table th {
+                font-size: 10px;
+                padding: 12px 8px;
+            }
+            
+            .deposit-id {
+                font-size: 11px;
+            }
+            
+            .deposit-amount {
+                font-size: 11px;
+            }
+            
+            .deposit-code {
+                font-size: 10px;
+            }
+            
+            .payment-method {
+                font-size: 10px;
+                padding: 2px 6px;
+            }
+            
+            .deposit-status {
+                font-size: 10px;
+                padding: 2px 8px;
+            }
+            
+            .deposit-date {
+                font-size: 10px;
+            }
+            
+            .pagination {
                 padding: 16px;
             }
             
-            .filter-title {
+            .pagination-btn {
+                padding: 7px 10px;
+                font-size: 13px;
+                min-width: 36px;
+                min-height: 36px;
+            }
+            
+            .no-deposits {
+                padding: 35px 16px;
+            }
+            
+            .no-deposits-icon {
+                width: 56px;
+                height: 56px;
+            }
+            
+            .no-deposits-text {
                 font-size: 14px;
+            }
+            
+            .btn-primary {
+                padding: 9px 16px;
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .content-area {
+                padding: 10px;
+            }
+            
+            .top-header {
+                padding: 10px 12px;
+            }
+            
+            .page-title {
+                font-size: 16px;
+            }
+            
+            .deposit-history-header h2 {
+                font-size: 18px;
+            }
+            
+            .deposits-table {
+                font-size: 11px;
+                min-width: 600px;
+            }
+            
+            .deposits-table th,
+            .deposits-table td {
+                padding: 10px 7px;
+            }
+            
+            .deposits-table th {
+                font-size: 10px;
+                padding: 12px 7px;
+            }
+            
+            .deposit-id {
+                font-size: 10px;
+            }
+            
+            .deposit-amount {
+                font-size: 10px;
+            }
+            
+            .deposit-code {
+                font-size: 9px;
+            }
+            
+            .payment-method {
+                font-size: 9px;
+                padding: 2px 5px;
+            }
+            
+            .deposit-status {
+                font-size: 9px;
+                padding: 2px 7px;
+            }
+            
+            .deposit-date {
+                font-size: 9px;
+            }
+            
+            .pagination-btn {
+                padding: 6px 9px;
+                font-size: 12px;
+                min-width: 34px;
+                min-height: 34px;
+            }
+            
+            .no-deposits {
+                padding: 30px 14px;
+            }
+            
+            .no-deposits-text {
+                font-size: 13px;
             }
         }
         
@@ -1225,15 +1533,36 @@ try {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
             display: none;
+            transition: opacity 0.3s ease;
         }
         
         .sidebar-overlay.show {
             display: block;
+            opacity: 1;
+        }
+        
+        /* Ensure proper layering and touch handling */
+        @media (max-width: 768px) {
+            .sidebar-overlay {
+                -webkit-tap-highlight-color: transparent;
+                user-select: none;
+            }
+            
+            .sidebar {
+                -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+                will-change: transform;
+            }
+            
+            .sidebar.show {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
