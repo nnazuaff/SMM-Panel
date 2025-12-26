@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/config/balance_conversion.php';
 auth_require();
 // Refresh saldo agar nilai terbaru langsung tampil saat halaman di-load
 auth_refresh_balance();
@@ -490,6 +491,81 @@ $sectionTitle = 'Top Up Saldo';
             gap: 8px;
         }
         
+        /* Method Toggle Styles */
+        .method-toggle {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .method-option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .method-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .method-option.active {
+            background: rgba(20, 184, 166, 0.1);
+            border-color: var(--teal-500);
+        }
+        
+        .method-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .method-option.active .method-radio {
+            border-color: var(--teal-500);
+        }
+        
+        .method-option.active .method-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: var(--teal-500);
+            border-radius: 50%;
+        }
+        
+        .method-details {
+            flex: 1;
+        }
+        
+        .method-details h3 {
+            color: var(--slate-100);
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+        
+        .method-details p {
+            color: var(--slate-300);
+            font-size: 13px;
+            margin: 0;
+        }
+        
+        /* Legacy method card (backup) */
         .method-card {
             background: rgba(20, 184, 166, 0.1);
             border: 2px solid var(--teal-500);
@@ -621,6 +697,51 @@ $sectionTitle = 'Top Up Saldo';
             border-color: var(--teal-500);
             background: rgba(255, 255, 255, 0.08);
             box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.2);
+        }
+        
+        .input-hint {
+            color: var(--slate-400);
+            font-size: 12px;
+            margin-top: 6px;
+        }
+        
+        /* Conversion Section Styles */
+        .conversion-section {
+            margin-bottom: 32px;
+        }
+        
+        .conversion-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .conversion-info-box {
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            color: var(--slate-200);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .conversion-info-box svg {
+            flex-shrink: 0;
+            margin-top: 2px;
+            stroke: #a78bfa;
+        }
+        
+        .conversion-info-box strong {
+            color: #c4b5fd;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .conversion-info-box ul {
+            color: var(--slate-300);
         }
         
         .form-input::placeholder {
@@ -1524,7 +1645,7 @@ $sectionTitle = 'Top Up Saldo';
                         <p>Isi ulang saldo Anda untuk melanjutkan pemesanan layanan</p>
                     </div>
                     
-                    <!-- Payment Method -->
+                    <!-- Payment Method Selection -->
                     <div class="deposit-card">
                         <div class="method-section">
                             <div class="method-title">
@@ -1533,19 +1654,38 @@ $sectionTitle = 'Top Up Saldo';
                                     <line x1="8" y1="21" x2="16" y2="21" stroke-width="2"/>
                                     <line x1="12" y1="17" x2="12" y2="21" stroke-width="2"/>
                                 </svg>
-                                Metode Pembayaran
+                                Pilih Metode Pembayaran
                             </div>
-                            <div class="method-card">
-                                <div class="method-icon">QR</div>
-                                <div class="method-info">
-                                    <h3>QRIS (Quick Response Code Indonesian Standard)</h3>
-                                    <p>Pembayaran menggunakan scan QR Code - Semua bank dan e-wallet</p>
+                            
+                            <!-- Method Toggle -->
+                            <div class="method-toggle">
+                                <div class="method-option active" data-method="qris" id="methodQris">
+                                    <div class="method-radio"></div>
+                                    <div class="method-icon">QR</div>
+                                    <div class="method-details">
+                                        <h3>QRIS Payment</h3>
+                                        <p>Scan QR Code - Semua bank & e-wallet</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="method-option" data-method="conversion" id="methodConversion">
+                                    <div class="method-radio"></div>
+                                    <div class="method-icon" style="background: linear-gradient(135deg, #8b5cf6, #6366f1);">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                            <path d="M7 16V4M7 4L3 8M7 4L11 8"/>
+                                            <path d="M17 8V20M17 20L21 16M17 20L13 16"/>
+                                        </svg>
+                                    </div>
+                                    <div class="method-details">
+                                        <h3>Konversi Saldo AcisPayment</h3>
+                                        <p>Transfer saldo dari aplikasi AcisPayment</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Amount Selection -->
-                        <div class="amount-section">
+                        <!-- QRIS Amount Section -->
+                        <div class="amount-section" id="qrisAmountSection">
                             <div class="amount-title">Pilih Nominal</div>
                             <div class="quick-amounts">
                                 <div class="quick-amount" data-amount="10000">Rp 10.000</div>
@@ -1600,6 +1740,70 @@ $sectionTitle = 'Top Up Saldo';
                             </div>
                         </div>
                         
+                        <!-- Conversion Form Section -->
+                        <div class="conversion-section" id="conversionSection" style="display: none;">
+                            <div class="conversion-form">
+                                <div class="form-group">
+                                    <label class="form-label" for="acisUsername">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-width="2"/>
+                                            <circle cx="12" cy="7" r="4" stroke-width="2"/>
+                                        </svg>
+                                        Username AcisPayment
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="acisUsername" 
+                                        name="acisUsername" 
+                                        class="form-input" 
+                                        placeholder="Masukkan username AcisPayment Anda"
+                                    >
+                                    <div class="input-hint">Username yang terdaftar di aplikasi AcisPayment</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="conversionAmount">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                                            <line x1="12" y1="1" x2="12" y2="23" stroke-width="2"/>
+                                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke-width="2"/>
+                                        </svg>
+                                        Nominal Konversi
+                                    </label>
+                                    <input 
+                                        type="number" 
+                                        id="conversionAmount" 
+                                        name="conversionAmount" 
+                                        class="form-input" 
+                                        placeholder="Masukkan nominal yang ingin dikonversi"
+                                        min="1000"
+                                        max="10000000"
+                                    >
+                                    <div class="amount-limits">
+                                        <span>Minimal: Rp 1.000</span>
+                                        <span>Maksimal: Rp 10.000.000</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="conversion-info-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                                        <line x1="12" y1="16" x2="12" y2="12" stroke-width="2"/>
+                                        <line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2"/>
+                                    </svg>
+                                    <div>
+                                        <strong>Cara Kerja:</strong>
+                                        <ul style="margin: 8px 0 0; padding-left: 20px; font-size: 13px;">
+                                            <li>Isi username AcisPayment dan nominal yang ingin dikonversi</li>
+                                            <li>Permintaan akan masuk ke queue dan menunggu verifikasi admin</li>
+                                            <li>Admin akan mengecek saldo AcisPayment Anda</li>
+                                            <li>Setelah disetujui, saldo akan otomatis masuk ke akun SMM Panel</li>
+                                            <li>Proses verifikasi membutuhkan waktu maksimal 1x24 jam</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <!-- Submit Button -->
                         <div class="submit-section">
                             <button type="button" class="submit-btn" id="submitBtn" disabled>
@@ -1613,7 +1817,7 @@ $sectionTitle = 'Top Up Saldo';
                     </div>
                     
                     <!-- Info Card -->
-                    <div class="deposit-card">
+                    <div class="deposit-card" id="infoCard">
                         <div class="method-title">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <circle cx="12" cy="12" r="10" stroke-width="2"/>
@@ -1621,13 +1825,26 @@ $sectionTitle = 'Top Up Saldo';
                             </svg>
                             Informasi Penting
                         </div>
-                        <div style="color: var(--slate-300); font-size: 14px; line-height: 1.6;">
+                        <div id="qrisInfo" style="color: var(--slate-300); font-size: 14px; line-height: 1.6;">
+                            <strong style="color: var(--teal-300); display: block; margin-bottom: 8px;">Pembayaran QRIS:</strong>
                             <ul style="margin: 0; padding-left: 20px;">
-                                <li>Transfer sesuai dengan nominal yang Anda pilih</li>
+                                <li>Transfer sesuai dengan nominal yang tertera (termasuk kode unik)</li>
+                                <li>Scan QR Code dengan aplikasi mobile banking atau e-wallet</li>
                                 <li>Upload bukti transfer yang jelas dan dapat dibaca</li>
-                                <li>Proses verifikasi membutuhkan waktu 1x24 jam</li>
+                                <li>Proses verifikasi membutuhkan waktu maksimal 1x24 jam</li>
                                 <li>Saldo akan otomatis masuk setelah diverifikasi admin</li>
-                                <li>Jika ada kendala, hubungi customer service</li>
+                            </ul>
+                        </div>
+                        <div id="conversionInfo" style="display: none; color: var(--slate-300); font-size: 14px; line-height: 1.6;">
+                            <strong style="color: #a78bfa; display: block; margin-bottom: 8px;">Konversi Saldo AcisPayment:</strong>
+                            <ul style="margin: 0; padding-left: 20px;">
+                                <li>Pastikan username AcisPayment yang Anda masukkan benar</li>
+                                <li>Pastikan saldo di AcisPayment mencukupi untuk konversi</li>
+                                <li>Permintaan akan masuk ke queue untuk diverifikasi admin</li>
+                                <li>Admin akan mengecek saldo Anda di aplikasi AcisPayment</li>
+                                <li>Setelah disetujui, saldo langsung masuk ke akun SMM Panel</li>
+                                <li>Proses verifikasi membutuhkan waktu maksimal 1x24 jam</li>
+                                <li>Jika ditolak, Anda akan menerima notifikasi dengan alasan penolakan</li>
                             </ul>
                         </div>
                     </div>
@@ -1799,6 +2016,13 @@ $sectionTitle = 'Top Up Saldo';
 
         // DEPOSIT FUNCTIONALITY
         function initializeDeposit() {
+            // Method toggle elements
+            const methodQris = document.getElementById('methodQris');
+            const methodConversion = document.getElementById('methodConversion');
+            const qrisAmountSection = document.getElementById('qrisAmountSection');
+            const conversionSection = document.getElementById('conversionSection');
+            
+            // QRIS elements
             const quickAmounts = document.querySelectorAll('.quick-amount');
             const amountInput = document.getElementById('amount');
             const submitBtn = document.getElementById('submitBtn');
@@ -1806,6 +2030,10 @@ $sectionTitle = 'Top Up Saldo';
             const uniqueCodeSection = document.getElementById('uniqueCodeSection');
             const finalAmount = document.getElementById('finalAmount');
             const copyAmountBtn = document.getElementById('copyAmountBtn');
+            
+            // Conversion elements
+            const acisUsernameInput = document.getElementById('acisUsername');
+            const conversionAmountInput = document.getElementById('conversionAmount');
             
             // QRIS Modal elements
             const qrisModal = document.getElementById('qrisModal');
@@ -1824,6 +2052,47 @@ $sectionTitle = 'Top Up Saldo';
             let uniqueCode = 0;
             let finalAmountWithCode = 0;
             let uploadedFile = null;
+            let currentMethod = 'qris'; // default method
+
+            // Method toggle functionality
+            methodQris.addEventListener('click', function() {
+                if (currentMethod !== 'qris') {
+                    currentMethod = 'qris';
+                    methodQris.classList.add('active');
+                    methodConversion.classList.remove('active');
+                    qrisAmountSection.style.display = 'block';
+                    conversionSection.style.display = 'none';
+                    submitBtn.disabled = selectedAmount <= 0;
+                    // Toggle info card
+                    document.getElementById('qrisInfo').style.display = 'block';
+                    document.getElementById('conversionInfo').style.display = 'none';
+                }
+            });
+            
+            methodConversion.addEventListener('click', function() {
+                if (currentMethod !== 'conversion') {
+                    currentMethod = 'conversion';
+                    methodConversion.classList.add('active');
+                    methodQris.classList.remove('active');
+                    conversionSection.style.display = 'block';
+                    qrisAmountSection.style.display = 'none';
+                    validateConversionForm();
+                    // Toggle info card
+                    document.getElementById('qrisInfo').style.display = 'none';
+                    document.getElementById('conversionInfo').style.display = 'block';
+                }
+            });
+            
+            // Validate conversion form
+            function validateConversionForm() {
+                const username = acisUsernameInput.value.trim();
+                const amount = parseFloat(conversionAmountInput.value) || 0;
+                submitBtn.disabled = !username || amount < 1000 || amount > 10000000;
+            }
+            
+            // Listen to conversion input changes
+            acisUsernameInput.addEventListener('input', validateConversionForm);
+            conversionAmountInput.addEventListener('input', validateConversionForm);
 
             // Generate unique code based on user ID and timestamp
             function generateUniqueCode() {
@@ -1919,15 +2188,19 @@ $sectionTitle = 'Top Up Saldo';
                 validateForm();
             });
 
-            // Submit button handler (now opens QRIS modal)
+            // Submit button handler (handles both QRIS and conversion)
             submitBtn.addEventListener('click', function() {
-                if (!validateAmount(selectedAmount)) {
-                    showNotification('error', 'Nominal tidak valid', 'Periksa kembali nominal yang Anda masukkan');
-                    return;
+                if (currentMethod === 'qris') {
+                    // QRIS payment flow
+                    if (!validateAmount(selectedAmount)) {
+                        showNotification('error', 'Nominal tidak valid', 'Periksa kembali nominal yang Anda masukkan');
+                        return;
+                    }
+                    openQrisModal();
+                } else if (currentMethod === 'conversion') {
+                    // Conversion request flow
+                    submitConversionRequest();
                 }
-                
-                // Open QRIS modal
-                openQrisModal();
             });
 
             // QRIS Modal Functions
@@ -2183,10 +2456,71 @@ $sectionTitle = 'Top Up Saldo';
                 uniqueCode = 0;
                 uploadedFile = null;
                 amountInput.value = '';
+                acisUsernameInput.value = '';
+                conversionAmountInput.value = '';
                 quickAmounts.forEach(btn => btn.classList.remove('active'));
                 uniqueCodeSection.style.display = 'none';
                 clearAmountError();
                 validateForm();
+            }
+            
+            // Submit conversion request
+            async function submitConversionRequest() {
+                const username = acisUsernameInput.value.trim();
+                const amount = parseFloat(conversionAmountInput.value) || 0;
+                
+                // Validate
+                if (!username) {
+                    showNotification('error', 'Username diperlukan', 'Masukkan username AcisPayment Anda');
+                    acisUsernameInput.focus();
+                    return;
+                }
+                
+                if (amount < 1000) {
+                    showNotification('error', 'Nominal terlalu kecil', 'Minimal konversi adalah Rp 1.000');
+                    conversionAmountInput.focus();
+                    return;
+                }
+                
+                if (amount > 10000000) {
+                    showNotification('error', 'Nominal terlalu besar', 'Maksimal konversi adalah Rp 10.000.000');
+                    conversionAmountInput.focus();
+                    return;
+                }
+                
+                // Disable button and show loading
+                submitBtn.disabled = true;
+                submitBtnText.textContent = 'Mengirim...';
+                
+                try {
+                    const response = await fetch('api/balance_conversion.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'submit_conversion',
+                            acispayment_username: username,
+                            amount: amount
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        showNotification('success', 'Permintaan Terkirim', data.message + ' Request ID: #' + data.request_id);
+                        resetForm();
+                    } else {
+                        showNotification('error', 'Gagal', data.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showNotification('error', 'Kesalahan', 'Terjadi kesalahan saat mengirim permintaan');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtnText.textContent = 'Kirim Permintaan';
+                    validateConversionForm();
+                }
             }
         }
 
