@@ -870,13 +870,17 @@ try {
                                 </div>
                                 <div class="balance-info">
                                     <span class="balance-icon" style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:rgba(20,184,166,.18);border:1px solid rgba(20,184,166,.35);border-radius:6px;font-size:10px;font-weight:600;letter-spacing:.5px;color:var(--teal-300);">RP</span>
-                                    <div style="font-size:18px;font-weight:700;color:var(--teal-300);margin-top:4px;">
-                                        Rp <?= number_format($user['balance'] ?? 0, 0, ',', '.'); ?>
-                                    </div>
-                                    <div style="font-size:11px;color:var(--teal-400);margin-top:2px;">Saldo Tersedia</div>
+                                    &nbsp;Saldo: Rp <?= number_format((int)($user['balance'] ?? 0), 0, ',', '.'); ?>
                                 </div>
                             </div>
                             <div class="profile-menu-items">
+                                <a href="profile.php" class="profile-menu-item">
+                                    <svg class="profile-menu-icon" viewBox="0 0 24 24">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                    Profil Saya
+                                </a>
                                 <a href="deposit.php" class="profile-menu-item">
                                     <svg class="profile-menu-icon" viewBox="0 0 24 24">
                                         <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
@@ -888,10 +892,10 @@ try {
                                 <a href="auth/logout.php" class="profile-menu-item danger">
                                     <svg class="profile-menu-icon" viewBox="0 0 24 24">
                                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                                        <polyline points="16 17 21 12 16 7"/>
+                                        <polyline points="16,17 21,12 16,7"/>
                                         <line x1="21" y1="12" x2="9" y2="12"/>
                                     </svg>
-                                    Logout
+                                    Keluar
                                 </a>
                             </div>
                         </div>
@@ -1010,20 +1014,24 @@ try {
 
         // Sidebar functionality - SAMA PERSIS
         function initializeSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const sidebarOverlay = document.getElementById('sidebarOverlay');
             const hamburgerBtn = document.getElementById('hamburgerBtn');
             const hamburger = document.getElementById('hamburger');
+            const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-            if (!hamburgerBtn || !sidebar) return;
-
-            // Toggle sidebar on mobile
-            hamburgerBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                sidebar.classList.toggle('show');
-                sidebarOverlay.classList.toggle('show');
-                hamburger.classList.toggle('active');
+            hamburgerBtn.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    // Mobile: toggle sidebar visibility
+                    sidebar.classList.toggle('show');
+                    sidebarOverlay.classList.toggle('show');
+                    hamburger.classList.toggle('active');
+                } else {
+                    // Desktop: toggle sidebar collapse
+                    sidebar.classList.toggle('collapsed');
+                    mainContent.classList.toggle('collapsed');
+                    hamburger.classList.toggle('active');
+                }
             });
 
             // Close sidebar when clicking overlay
@@ -1033,23 +1041,23 @@ try {
                 hamburger.classList.remove('active');
             });
 
-            // Close sidebar when clicking outside on mobile
-            document.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768) {
-                    if (!sidebar.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-                        sidebar.classList.remove('show');
-                        sidebarOverlay.classList.remove('show');
-                        hamburger.classList.remove('active');
-                    }
-                }
-            });
-
             // Handle window resize
             window.addEventListener('resize', function() {
                 if (window.innerWidth > 768) {
                     sidebar.classList.remove('show');
                     sidebarOverlay.classList.remove('show');
-                    hamburger.classList.remove('active');
+                    mainContent.classList.remove('expanded');
+                    if (sidebar.classList.contains('collapsed')) {
+                        mainContent.classList.add('collapsed');
+                    } else {
+                        mainContent.classList.remove('collapsed');
+                    }
+                } else {
+                    sidebar.classList.remove('collapsed');
+                    mainContent.classList.remove('collapsed');
+                    if (!sidebar.classList.contains('show')) {
+                        mainContent.classList.add('expanded');
+                    }
                 }
             });
         }
@@ -1059,21 +1067,19 @@ try {
             const profileBtn = document.getElementById('profileBtn');
             const profileMenu = document.getElementById('profileMenu');
 
-            if (!profileBtn || !profileMenu) return;
-
             profileBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 profileMenu.classList.toggle('show');
             });
 
-            // Close profile menu when clicking outside
+            // Close when clicking outside
             document.addEventListener('click', function(e) {
-                if (!profileMenu.contains(e.target) && !profileBtn.contains(e.target)) {
+                if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
                     profileMenu.classList.remove('show');
                 }
             });
 
-            // Prevent closing when clicking inside profile menu
+            // Prevent menu from closing when clicking inside
             profileMenu.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
