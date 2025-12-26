@@ -27,27 +27,78 @@ $page = max(1, intval($_GET['page'] ?? 1));
 $perPage = 20;
 $offset = ($page - 1) * $perPage;
 
-// Get deposits with pagination
+// Get filter parameters
+$filterYear = $_GET['year'] ?? '';
+$filterStatus = $_GET['status'] ?? '';
+$filterMethod = $_GET['method'] ?? '';
+$filterSearch = $_GET['search'] ?? '';
+
+// Build WHERE clause with filters
+$whereConditions = ['user_id = ?'];
+$params = [$user['id']];
+
+// Year filter
+if (!empty($filterYear) && is_numeric($filterYear)) {
+    $whereConditions[] = 'YEAR(created_at) = ?';
+    $params[] = intval($filterYear);
+}
+
+// Status filter
+if (!empty($filterStatus) && in_array($filterStatus, ['pending', 'success', 'failed', 'expired'])) {
+    $whereConditions[] = 'status = ?';
+    $params[] = $filterStatus;
+}
+
+// Method filter
+if (!empty($filterMethod) && in_array($filterMethod, ['qris', 'conversion'])) {
+    $whereConditions[] = 'payment_method = ?';
+    $params[] = $filterMethod;
+}
+
+// Search filter (ID, amount, or final_amount)
+if (!empty($filterSearch)) {
+    $searchTerm = trim($filterSearch);
+    if (is_numeric($searchTerm)) {
+        $whereConditions[] = '(id = ? OR amount = ? OR final_amount = ?)';
+        $params[] = intval($searchTerm);
+        $params[] = floatval($searchTerm);
+        $params[] = floatval($searchTerm);
+    }
+}
+
+$whereClause = implode(' AND ', $whereConditions);
+
+// Get deposits with pagination and filters
 try {
     $pdo = getDBConnection();
     if ($pdo) {
-        // Get total count
-        $stmt = $pdo->prepare('SELECT COUNT(*) FROM deposits WHERE user_id = ?');
-        $stmt->execute([$user['id']]);
+        // Get total count with filters
+        $countSql = "SELECT COUNT(*) FROM deposits WHERE $whereClause";
+        $stmt = $pdo->prepare($countSql);
+        $stmt->execute($params);
         $totalDeposits = $stmt->fetchColumn();
         $paginationInfo['total'] = $totalDeposits;
         $paginationInfo['current_page'] = $page;
-        $paginationInfo['total_pages'] = ceil($totalDeposits / $perPage);
+        $paginationInfo['total_pages'] = max(1, ceil($totalDeposits / $perPage));
         $paginationInfo['per_page'] = $perPage;
 
-        // Get deposits
-        $stmt = $pdo->prepare('SELECT * FROM deposits WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?');
-        $stmt->execute([$user['id'], $perPage, $offset]);
+        // Get deposits with filters
+        $sql = "SELECT * FROM deposits WHERE $whereClause ORDER BY created_at DESC LIMIT ? OFFSET ?";
+        $params[] = $perPage;
+        $params[] = $offset;
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
         $deposits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Get available years for filter dropdown
+        $stmtYears = $pdo->prepare('SELECT DISTINCT YEAR(created_at) as year FROM deposits WHERE user_id = ? ORDER BY year DESC');
+        $stmtYears->execute([$user['id']]);
+        $availableYears = $stmtYears->fetchAll(PDO::FETCH_COLUMN);
     }
 } catch (Exception $e) {
     error_log('Error fetching deposits: ' . $e->getMessage());
     $deposits = [];
+    $availableYears = [];
 }
 ?>
 <!DOCTYPE html>
@@ -672,6 +723,130 @@ try {
             transform: translateY(-1px);
         }
         
+        /* Filter Section */
+        .filter-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .filter-title {
+            color: var(--slate-100);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--teal-300);
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .filter-search-group {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        
+        .filter-search-box {
+            flex: 1;
+        }
+        
+        .filter-label {
+            display: block;
+            color: var(--slate-300);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        
+        .filter-select,
+        .filter-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: var(--slate-100);
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-select:focus,
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--teal-500);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .filter-select option {
+            background: var(--navy-800);
+            color: var(--slate-100);
+        }
+        
+        .filter-btn {
+            background: var(--teal-500);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        
+        .filter-btn:hover {
+            background: var(--teal-600);
+        }
+        
+        .filter-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .filter-reset {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--slate-300);
+        }
+        
+        .filter-reset:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--slate-200);
+        }
+        
+        .filter-active-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(20, 184, 166, 0.15);
+            color: var(--teal-300);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: auto;
+        }
+        
         /* Pagination */
         .pagination {
             display: flex;
@@ -739,6 +914,19 @@ try {
             .deposits-table td:nth-child(3) {
                 display: none;
             }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-search-group {
+                flex-direction: column;
+            }
+            
+            .filter-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
         
         @media (max-width: 480px) {
@@ -755,6 +943,14 @@ try {
             .deposits-table th:nth-child(4),
             .deposits-table td:nth-child(4) {
                 display: none;
+            }
+            
+            .filter-section {
+                padding: 16px;
+            }
+            
+            .filter-title {
+                font-size: 14px;
             }
         }
         
@@ -937,6 +1133,96 @@ try {
                     <p>Lihat semua riwayat deposit saldo Anda</p>
                 </div>
 
+                <!-- Filter Section -->
+                <div class="filter-section">
+                    <h3 class="filter-title">
+                        <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                        </svg>
+                        Filter Pencarian
+                        <?php
+                        $activeFilters = 0;
+                        if (!empty($filterYear)) $activeFilters++;
+                        if (!empty($filterStatus)) $activeFilters++;
+                        if (!empty($filterMethod)) $activeFilters++;
+                        if (!empty($filterSearch)) $activeFilters++;
+                        if ($activeFilters > 0):
+                        ?>
+                            <span class="filter-active-badge"><?= $activeFilters; ?> filter aktif</span>
+                        <?php endif; ?>
+                    </h3>
+                    
+                    <form method="GET" action="" id="filterForm">
+                        <div class="filter-grid">
+                            <!-- Year Filter -->
+                            <div>
+                                <label class="filter-label">Tahun</label>
+                                <select name="year" class="filter-select">
+                                    <option value="">Semua Tahun</option>
+                                    <?php foreach ($availableYears as $year): ?>
+                                        <option value="<?= $year; ?>" <?= $filterYear == $year ? 'selected' : ''; ?>>
+                                            <?= $year; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            
+                            <!-- Status Filter -->
+                            <div>
+                                <label class="filter-label">Status</label>
+                                <select name="status" class="filter-select">
+                                    <option value="">Semua Status</option>
+                                    <option value="pending" <?= $filterStatus === 'pending' ? 'selected' : ''; ?>>Menunggu</option>
+                                    <option value="success" <?= $filterStatus === 'success' ? 'selected' : ''; ?>>Berhasil</option>
+                                    <option value="failed" <?= $filterStatus === 'failed' ? 'selected' : ''; ?>>Gagal</option>
+                                    <option value="expired" <?= $filterStatus === 'expired' ? 'selected' : ''; ?>>Kadaluarsa</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Method Filter -->
+                            <div>
+                                <label class="filter-label">Metode Pembayaran</label>
+                                <select name="method" class="filter-select">
+                                    <option value="">Semua Metode</option>
+                                    <option value="qris" <?= $filterMethod === 'qris' ? 'selected' : ''; ?>>QRIS</option>
+                                    <option value="conversion" <?= $filterMethod === 'conversion' ? 'selected' : ''; ?>>Konversi</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Search Box -->
+                        <div class="filter-search-group">
+                            <div class="filter-search-box">
+                                <label class="filter-label">Cari berdasarkan ID Deposit, Jumlah, atau Total Bayar</label>
+                                <input 
+                                    type="text" 
+                                    name="search" 
+                                    class="filter-input" 
+                                    placeholder="Contoh: 12345 atau 10000"
+                                    value="<?= htmlspecialchars($filterSearch); ?>"
+                                >
+                            </div>
+                            <button type="submit" class="filter-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="m21 21-4.35-4.35"/>
+                                </svg>
+                                Cari
+                            </button>
+                            <button type="button" class="filter-btn filter-reset" onclick="resetFilters()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 6h18"/>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                    <line x1="10" y1="11" x2="10" y2="17"/>
+                                    <line x1="14" y1="11" x2="14" y2="17"/>
+                                </svg>
+                                Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="deposits-table-card">
                     <div class="table-header">
                         <h3 class="table-title">Daftar Deposit</h3>
@@ -948,8 +1234,8 @@ try {
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <p class="no-deposits-text">Belum ada riwayat deposit</p>
-                            <a href="deposit.php" class="btn-primary">Top Up Saldo Sekarang</a>
+                            <p class="no-deposits-text">Tidak ada riwayat deposit yang sesuai dengan filter</p>
+                            <button onclick="resetFilters()" class="btn-primary">Reset Filter</button>
                         </div>
                     <?php else: ?>
                         <div class="table-responsive">
@@ -1025,20 +1311,30 @@ try {
 
                         <?php if ($paginationInfo['total_pages'] > 1): ?>
                             <div class="pagination">
+                                <?php 
+                                // Build query string to preserve filters
+                                $queryParams = [];
+                                if (!empty($filterYear)) $queryParams['year'] = $filterYear;
+                                if (!empty($filterStatus)) $queryParams['status'] = $filterStatus;
+                                if (!empty($filterMethod)) $queryParams['method'] = $filterMethod;
+                                if (!empty($filterSearch)) $queryParams['search'] = $filterSearch;
+                                $queryString = !empty($queryParams) ? '&' . http_build_query($queryParams) : '';
+                                ?>
+                                
                                 <?php if ($page > 1): ?>
-                                    <a href="?page=<?= $page - 1; ?>" class="pagination-btn">« Sebelumnya</a>
+                                    <a href="?page=<?= $page - 1; ?><?= $queryString; ?>" class="pagination-btn">« Sebelumnya</a>
                                 <?php else: ?>
                                     <span class="pagination-btn disabled">« Sebelumnya</span>
                                 <?php endif; ?>
 
                                 <?php for ($i = max(1, $page - 2); $i <= min($paginationInfo['total_pages'], $page + 2); $i++): ?>
-                                    <a href="?page=<?= $i; ?>" class="pagination-btn <?= $i === $page ? 'active' : ''; ?>">
+                                    <a href="?page=<?= $i; ?><?= $queryString; ?>" class="pagination-btn <?= $i === $page ? 'active' : ''; ?>">
                                         <?= $i; ?>
                                     </a>
                                 <?php endfor; ?>
 
                                 <?php if ($page < $paginationInfo['total_pages']): ?>
-                                    <a href="?page=<?= $page + 1; ?>" class="pagination-btn">Selanjutnya »</a>
+                                    <a href="?page=<?= $page + 1; ?><?= $queryString; ?>" class="pagination-btn">Selanjutnya »</a>
                                 <?php else: ?>
                                     <span class="pagination-btn disabled">Selanjutnya »</span>
                                 <?php endif; ?>
@@ -1058,6 +1354,11 @@ try {
             initializeSidebar();
             initializeProfile();
         });
+
+        // Reset all filters
+        function resetFilters() {
+            window.location.href = 'deposit_history.php';
+        }
 
         // Sidebar functionality - SAMA PERSIS
         function initializeSidebar() {
