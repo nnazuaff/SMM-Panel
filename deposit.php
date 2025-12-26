@@ -628,40 +628,21 @@ $sectionTitle = 'Top Up Saldo';
             text-align: center;
             color: var(--slate-200);
             font-weight: 500;
+            font-family: 'Poppins', sans-serif;
             cursor: pointer;
-            transition: all 0.15s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .quick-amount::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-            transition: left 0.5s ease-out;
-        }
-        
-        .quick-amount:hover::before {
-            left: 100%;
+            transition: all 0.2s ease;
         }
         
         .quick-amount:hover {
-            background: rgba(20, 184, 166, 0.08);
+            background: rgba(20, 184, 166, 0.1);
             border-color: rgba(20, 184, 166, 0.3);
             color: var(--teal-300);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(20, 184, 166, 0.15);
         }
         
         .quick-amount.active {
             background: rgba(20, 184, 166, 0.15);
             border-color: var(--teal-500);
             color: var(--teal-300);
-            box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.3);
         }
         
         .custom-amount {
@@ -705,6 +686,43 @@ $sectionTitle = 'Top Up Saldo';
             margin-top: 6px;
         }
         
+        /* Input with Prefix Styles */
+        .input-with-prefix {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-prefix {
+            position: absolute;
+            left: 16px;
+            color: var(--slate-300);
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .form-input.with-prefix {
+            padding-left: 42px;
+        }
+        
+        .label-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: var(--teal-500);
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        
         /* Conversion Section Styles */
         .conversion-section {
             margin-bottom: 32px;
@@ -717,8 +735,8 @@ $sectionTitle = 'Top Up Saldo';
         }
         
         .conversion-info-box {
-            background: rgba(139, 92, 246, 0.08);
-            border: 1px solid rgba(139, 92, 246, 0.25);
+            background: rgba(20, 184, 166, 0.08);
+            border: 1px solid rgba(20, 184, 166, 0.25);
             border-radius: 10px;
             padding: 16px;
             display: flex;
@@ -731,11 +749,11 @@ $sectionTitle = 'Top Up Saldo';
         .conversion-info-box svg {
             flex-shrink: 0;
             margin-top: 2px;
-            stroke: #a78bfa;
+            stroke: var(--teal-300);
         }
         
         .conversion-info-box strong {
-            color: #c4b5fd;
+            color: var(--teal-300);
             display: block;
             margin-bottom: 4px;
         }
@@ -921,42 +939,22 @@ $sectionTitle = 'Top Up Saldo';
             color: white;
             font-size: 16px;
             font-weight: 600;
+            font-family: 'Poppins', sans-serif;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        
-        .submit-btn:active {
-            transform: scale(0.98);
-            transition: transform 0.1s ease;
+        .submit-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
         }
         
         .submit-btn:disabled {
             background: rgba(255, 255, 255, 0.05);
             color: var(--slate-400);
             cursor: not-allowed;
-            box-shadow: none;
-        }
-        
-        .submit-btn:disabled::before {
-            display: none;
         }
         
         /* QRIS Popup Modal */
@@ -1670,7 +1668,7 @@ $sectionTitle = 'Top Up Saldo';
                                 
                                 <div class="method-option" data-method="conversion" id="methodConversion">
                                     <div class="method-radio"></div>
-                                    <div class="method-icon" style="background: linear-gradient(135deg, #8b5cf6, #6366f1);">
+                                    <div class="method-icon" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                                             <path d="M7 16V4M7 4L3 8M7 4L11 8"/>
                                             <path d="M17 8V20M17 20L21 16M17 20L13 16"/>
@@ -1697,16 +1695,22 @@ $sectionTitle = 'Top Up Saldo';
                             
                             <div class="custom-amount">
                                 <div class="form-group">
-                                    <label class="form-label" for="amount">Atau masukkan nominal manual</label>
-                                    <input 
-                                        type="number" 
-                                        id="amount" 
-                                        name="amount" 
-                                        class="form-input" 
-                                        placeholder="Masukkan nominal (Rp)" 
-                                        min="1000" 
-                                        max="200000"
-                                    >
+                                    <label class="form-label" for="amount">
+                                        <span class="label-icon">Rp</span>
+                                        Atau masukkan nominal manual
+                                    </label>
+                                    <div class="input-with-prefix">
+                                        <span class="input-prefix">Rp</span>
+                                        <input 
+                                            type="number" 
+                                            id="amount" 
+                                            name="amount" 
+                                            class="form-input with-prefix" 
+                                            placeholder="0" 
+                                            min="1000" 
+                                            max="200000"
+                                        >
+                                    </div>
                                     <div class="amount-limits">
                                         <span>Minimal: Rp 1.000</span>
                                         <span>Maksimal: Rp 200.000</span>
@@ -1762,22 +1766,58 @@ $sectionTitle = 'Top Up Saldo';
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="form-label" for="conversionAmount">
+                                    <label class="form-label" for="phoneNumber">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
-                                            <line x1="12" y1="1" x2="12" y2="23" stroke-width="2"/>
-                                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke-width="2"/>
+                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke-width="2"/>
                                         </svg>
-                                        Nominal Konversi
+                                        Nomor HP
                                     </label>
                                     <input 
-                                        type="number" 
-                                        id="conversionAmount" 
-                                        name="conversionAmount" 
+                                        type="tel" 
+                                        id="phoneNumber" 
+                                        name="phoneNumber" 
                                         class="form-input" 
-                                        placeholder="Masukkan nominal yang ingin dikonversi"
-                                        min="1000"
-                                        max="10000000"
+                                        placeholder="08xxxxxxxxxx"
+                                        pattern="[0-9]{10,13}"
                                     >
+                                    <div class="input-hint">Nomor HP yang terdaftar di AcisPayment</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="email">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke-width="2"/>
+                                            <polyline points="22,6 12,13 2,6" stroke-width="2"/>
+                                        </svg>
+                                        Email
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        id="email" 
+                                        name="email" 
+                                        class="form-input" 
+                                        placeholder="email@example.com"
+                                    >
+                                    <div class="input-hint">Email yang terdaftar di AcisPayment</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="conversionAmount">
+                                        <span class="label-icon">Rp</span>
+                                        Nominal Konversi
+                                    </label>
+                                    <div class="input-with-prefix">
+                                        <span class="input-prefix">Rp</span>
+                                        <input 
+                                            type="number" 
+                                            id="conversionAmount" 
+                                            name="conversionAmount" 
+                                            class="form-input with-prefix" 
+                                            placeholder="0"
+                                            min="1000"
+                                            max="10000000"
+                                        >
+                                    </div>
                                     <div class="amount-limits">
                                         <span>Minimal: Rp 1.000</span>
                                         <span>Maksimal: Rp 10.000.000</span>
@@ -1836,7 +1876,7 @@ $sectionTitle = 'Top Up Saldo';
                             </ul>
                         </div>
                         <div id="conversionInfo" style="display: none; color: var(--slate-300); font-size: 14px; line-height: 1.6;">
-                            <strong style="color: #a78bfa; display: block; margin-bottom: 8px;">Konversi Saldo AcisPayment:</strong>
+                            <strong style="color: var(--teal-300); display: block; margin-bottom: 8px;">Konversi Saldo AcisPayment:</strong>
                             <ul style="margin: 0; padding-left: 20px;">
                                 <li>Pastikan username AcisPayment yang Anda masukkan benar</li>
                                 <li>Pastikan saldo di AcisPayment mencukupi untuk konversi</li>
@@ -2033,6 +2073,8 @@ $sectionTitle = 'Top Up Saldo';
             
             // Conversion elements
             const acisUsernameInput = document.getElementById('acisUsername');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const emailInput = document.getElementById('email');
             const conversionAmountInput = document.getElementById('conversionAmount');
             
             // QRIS Modal elements
@@ -2086,12 +2128,19 @@ $sectionTitle = 'Top Up Saldo';
             // Validate conversion form
             function validateConversionForm() {
                 const username = acisUsernameInput.value.trim();
+                const phone = phoneNumberInput.value.trim();
+                const email = emailInput.value.trim();
                 const amount = parseFloat(conversionAmountInput.value) || 0;
-                submitBtn.disabled = !username || amount < 1000 || amount > 10000000;
+                
+                // All fields required and amount valid
+                const isValid = username && phone && email && amount >= 1000 && amount <= 10000000;
+                submitBtn.disabled = !isValid;
             }
             
             // Listen to conversion input changes
             acisUsernameInput.addEventListener('input', validateConversionForm);
+            phoneNumberInput.addEventListener('input', validateConversionForm);
+            emailInput.addEventListener('input', validateConversionForm);
             conversionAmountInput.addEventListener('input', validateConversionForm);
 
             // Generate unique code based on user ID and timestamp
@@ -2457,6 +2506,8 @@ $sectionTitle = 'Top Up Saldo';
                 uploadedFile = null;
                 amountInput.value = '';
                 acisUsernameInput.value = '';
+                phoneNumberInput.value = '';
+                emailInput.value = '';
                 conversionAmountInput.value = '';
                 quickAmounts.forEach(btn => btn.classList.remove('active'));
                 uniqueCodeSection.style.display = 'none';
@@ -2467,12 +2518,26 @@ $sectionTitle = 'Top Up Saldo';
             // Submit conversion request
             async function submitConversionRequest() {
                 const username = acisUsernameInput.value.trim();
+                const phone = phoneNumberInput.value.trim();
+                const email = emailInput.value.trim();
                 const amount = parseFloat(conversionAmountInput.value) || 0;
                 
                 // Validate
                 if (!username) {
                     showNotification('error', 'Username diperlukan', 'Masukkan username AcisPayment Anda');
                     acisUsernameInput.focus();
+                    return;
+                }
+                
+                if (!phone) {
+                    showNotification('error', 'Nomor HP diperlukan', 'Masukkan nomor HP yang terdaftar');
+                    phoneNumberInput.focus();
+                    return;
+                }
+                
+                if (!email) {
+                    showNotification('error', 'Email diperlukan', 'Masukkan email yang terdaftar');
+                    emailInput.focus();
                     return;
                 }
                 
@@ -2501,6 +2566,8 @@ $sectionTitle = 'Top Up Saldo';
                         body: JSON.stringify({
                             action: 'submit_conversion',
                             acispayment_username: username,
+                            phone_number: phone,
+                            email: email,
                             amount: amount
                         })
                     });

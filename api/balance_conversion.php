@@ -56,12 +56,24 @@ try {
                 exit();
             }
             
+            if (!isset($input['phone_number']) || empty(trim($input['phone_number']))) {
+                echo json_encode(['success' => false, 'message' => 'Nomor HP harus diisi']);
+                exit();
+            }
+            
+            if (!isset($input['email']) || empty(trim($input['email']))) {
+                echo json_encode(['success' => false, 'message' => 'Email harus diisi']);
+                exit();
+            }
+            
             if (!isset($input['amount']) || empty($input['amount'])) {
                 echo json_encode(['success' => false, 'message' => 'Nominal konversi harus diisi']);
                 exit();
             }
             
             $acispaymentUsername = trim($input['acispayment_username']);
+            $phoneNumber = trim($input['phone_number']);
+            $email = trim($input['email']);
             $amount = floatval($input['amount']);
             
             // Validate amount
@@ -76,7 +88,7 @@ try {
             }
             
             // Submit conversion request
-            $result = submitConversionRequest($user['id'], $acispaymentUsername, $amount);
+            $result = submitConversionRequest($user['id'], $acispaymentUsername, $phoneNumber, $email, $amount);
             
             if ($result['success']) {
                 echo json_encode([
