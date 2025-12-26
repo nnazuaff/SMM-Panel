@@ -755,51 +755,62 @@ require_once __DIR__ . '/api/MedanpediaAPI.php';
         }
         
         .btn-order {
-            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
+            background: #14b8a6;
             border: none;
-            border-radius: 8px;
-            padding: 14px 32px;
+            border-radius: 10px;
+            padding: 15px 36px;
             color: white;
-            font-size: 16px;
-            font-weight: 600;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: inline-flex;
             align-items: center;
             gap: 8px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            min-width: 160px;
-            letter-spacing: 0.025em;
+            box-shadow: 0 4px 14px 0 rgba(20, 184, 166, 0.25);
+            min-width: 180px;
+            letter-spacing: 0.3px;
         }
         
         .btn-order::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-            opacity: 0;
-            transition: opacity 0.2s ease;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        
+        .btn-order:hover:not(:disabled) {
+            background: #0d9488;
+            box-shadow: 0 6px 20px 0 rgba(20, 184, 166, 0.4);
+            transform: translateY(-2px);
         }
         
         .btn-order:hover:not(:disabled)::before {
-            opacity: 1;
+            width: 300px;
+            height: 300px;
         }
         
         .btn-order:active:not(:disabled) {
-            transform: scale(0.98);
-            transition: transform 0.1s ease;
+            transform: translateY(0px);
+            box-shadow: 0 2px 8px 0 rgba(20, 184, 166, 0.3);
+            transition: all 0.1s ease;
         }
+        
         .btn-order:disabled {
             background: rgba(255, 255, 255, 0.05);
             color: var(--slate-400);
             cursor: not-allowed;
             box-shadow: none;
+            transform: none;
         }
         
         .btn-order:disabled::before {
