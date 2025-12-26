@@ -738,57 +738,102 @@ try {
         
         /* Filter Section */
         .filter-section {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,.03);
+            border: 1px solid rgba(255,255,255,.06);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 24px;
+            backdrop-filter: blur(8px);
+        }
+        
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
         }
         
         .filter-title {
-            color: var(--slate-100);
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--slate-100);
+            font-size: 16px;
+            font-weight: 600;
         }
         
         .filter-icon {
             width: 20px;
             height: 20px;
+            color: var(--teal-400);
+        }
+        
+        .filter-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        .filter-toggle {
+            background: none;
+            border: none;
+            color: var(--slate-300);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .filter-toggle:hover {
+            background: rgba(255,255,255,.05);
             color: var(--teal-300);
         }
         
-        .filter-grid {
+        .filter-toggle svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.2s;
+        }
+        
+        .filter-toggle.collapsed svg {
+            transform: rotate(-90deg);
+        }
+        
+        .filter-form {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            transition: all 0.3s ease;
         }
         
-        .filter-search-group {
+        .filter-form.collapsed {
+            display: none;
+        }
+        
+        .filter-group {
             display: flex;
-            gap: 12px;
-            align-items: flex-end;
-        }
-        
-        .filter-search-box {
-            flex: 1;
+            flex-direction: column;
+            gap: 6px;
         }
         
         .filter-label {
-            display: block;
+            font-size: 12px;
+            font-weight: 600;
             color: var(--slate-300);
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .filter-select,
-        .filter-input {
-            width: 100%;
+        .filter-input,
+        .filter-select {
             background: rgba(15,41,66,.6);
             border: 1px solid rgba(255,255,255,.14);
             border-radius: 6px;
@@ -796,28 +841,34 @@ try {
             color: var(--slate-100);
             font-size: 14px;
             transition: all 0.2s;
+            width: 100%;
             box-sizing: border-box;
         }
         
-        .filter-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 8px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-            padding-right: 32px;
-        }
-        
-        .filter-select:hover {
-            border-color: var(--teal-500);
-        }
-        
-        .filter-select:focus,
-        .filter-input:focus {
+        .filter-input:focus,
+        .filter-select:focus {
             outline: none;
             border-color: var(--teal-500);
             background: rgba(15,41,66,.75);
             box-shadow: 0 0 0 3px rgba(20,184,166,.1);
+        }
+        
+        .filter-input:hover,
+        .filter-select:hover {
+            border-color: var(--teal-500);
+        }
+        
+        .filter-input::placeholder {
+            color: var(--slate-400);
+        }
+        
+        .filter-select {
+            appearance: none;
+            background-image: url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\");
+            background-position: right 8px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 32px;
         }
         
         .filter-select option {
@@ -825,53 +876,241 @@ try {
             color: var(--slate-100);
         }
         
+        .filter-search-group {
+            display: flex;
+            gap: 8px;
+            align-items: end;
+        }
+        
+        .filter-search-type {
+            min-width: 100px;
+            flex-shrink: 0;
+        }
+        
+        .filter-search-input {
+            flex: 1;
+        }
+        
+        .filter-date-group {
+            display: flex;
+            gap: 8px;
+            align-items: end;
+        }
+        
+        .filter-date-input {
+            flex: 1;
+        }
+        
+        .filter-actions {
+            display: flex;
+            gap: 8px;
+            align-items: end;
+            justify-content: flex-end;
+        }
+        
         .filter-btn {
-            background: var(--teal-500);
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            color: white;
-            font-size: 14px;
-            font-weight: 500;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
+            border: none;
             display: flex;
             align-items: center;
             gap: 6px;
             white-space: nowrap;
         }
         
-        .filter-btn:hover {
-            background: var(--teal-600);
+        .filter-btn-primary {
+            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
+            color: white;
+        }
+        
+        .filter-btn-primary:hover {
+            background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
+            transform: translateY(-1px);
+        }
+        
+        .filter-btn-secondary {
+            background: rgba(255,255,255,.05);
+            color: var(--slate-300);
+            border: 1px solid rgba(255,255,255,.1);
+        }
+        
+        .filter-btn-secondary:hover {
+            background: rgba(255,255,255,.08);
+            color: var(--slate-100);
         }
         
         .filter-btn svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
         
-        .filter-reset {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--slate-300);
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,.05);
         }
         
-        .filter-reset:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            color: var(--slate-200);
-        }
-        
-        .filter-active-badge {
+        .filter-tag {
             display: inline-flex;
             align-items: center;
-            background: rgba(20, 184, 166, 0.15);
+            gap: 6px;
+            background: rgba(20,184,166,.15);
             color: var(--teal-300);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
             font-weight: 500;
-            margin-left: auto;
+            border: 1px solid rgba(20,184,166,.25);
+        }
+        
+        .filter-tag-remove {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 2px;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        
+        .filter-tag-remove:hover {
+            background: rgba(20,184,166,.2);
+        }
+        
+        .filter-tag-remove svg {
+            width: 10px;
+            height: 10px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+        
+        /* Filter responsive */
+        @media (max-width: 768px) {
+            .filter-section {
+                padding: 16px;
+                margin-bottom: 20px;
+                border-radius: 8px;
+            }
+            
+            .filter-form {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .filter-search-group,
+            .filter-date-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            
+            .filter-search-type,
+            .filter-search-input,
+            .filter-date-input {
+                flex: none;
+            }
+            
+            .filter-actions {
+                justify-content: stretch;
+                margin-top: 8px;
+                grid-column: 1;
+            }
+            
+            .filter-btn {
+                flex: 1;
+                justify-content: center;
+            }
+            
+            .filter-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .filter-toggle {
+                align-self: flex-end;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .filter-section {
+                padding: 12px;
+                border-radius: 6px;
+            }
+            
+            .filter-header {
+                margin-bottom: 12px;
+            }
+            
+            .filter-title {
+                font-size: 14px;
+            }
+            
+            .filter-input,
+            .filter-select {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+            
+            .filter-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .active-filters {
+                margin-top: 10px;
+                padding-top: 10px;
+                gap: 6px;
+            }
+            
+            .filter-tag {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .filter-section {
+                padding: 10px;
+            }
+            
+            .filter-form {
+                gap: 10px;
+            }
+            
+            .filter-input,
+            .filter-select {
+                padding: 7px 9px;
+                font-size: 12px;
+            }
+            
+            .filter-btn {
+                padding: 7px 10px;
+                font-size: 11px;
+            }
+            
+            .filter-actions {
+                gap: 6px;
+            }
         }
         
         /* Pagination */
@@ -1162,28 +1401,60 @@ try {
 
                 <!-- Filter Section -->
                 <div class="filter-section">
-                    <h3 class="filter-title">
-                        <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                        </svg>
-                        Filter Pencarian
-                        <?php
-                        $activeFilters = 0;
-                        if (!empty($filterYear)) $activeFilters++;
-                        if (!empty($filterStatus)) $activeFilters++;
-                        if (!empty($filterMethod)) $activeFilters++;
-                        if (!empty($filterSearch)) $activeFilters++;
-                        if ($activeFilters > 0):
-                        ?>
-                            <span class="filter-active-badge"><?= $activeFilters; ?> filter aktif</span>
-                        <?php endif; ?>
-                    </h3>
+                    <div class="filter-header">
+                        <div class="filter-title">
+                            <div class="filter-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/>
+                                </svg>
+                            </div>
+                            Filter & Pencarian
+                        </div>
+                        <button type="button" class="filter-toggle" id="filterToggle">
+                            <svg viewBox="0 0 24 24">
+                                <polyline points="6,9 12,15 18,9"/>
+                            </svg>
+                            Sembunyikan
+                        </button>
+                    </div>
                     
-                    <form method="GET" action="" id="filterForm">
-                        <div class="filter-grid">
-                            <!-- Year Filter -->
-                            <div>
-                                <label class="filter-label">Tahun</label>
+                    <form method="GET" class="filter-form" id="filterForm">
+                        <!-- Preserve pagination -->
+                        <input type="hidden" name="page" value="1">
+                        
+                        <!-- Status Filter -->
+                        <div class="filter-group">
+                            <label class="filter-label">Status</label>
+                            <select name="status" class="filter-select">
+                                <option value="" <?= empty($filterStatus) ? 'selected' : ''; ?>>Semua Status</option>
+                                <option value="pending" <?= $filterStatus === 'pending' ? 'selected' : ''; ?>>Menunggu</option>
+                                <option value="success" <?= $filterStatus === 'success' ? 'selected' : ''; ?>>Berhasil</option>
+                                <option value="failed" <?= $filterStatus === 'failed' ? 'selected' : ''; ?>>Gagal</option>
+                                <option value="expired" <?= $filterStatus === 'expired' ? 'selected' : ''; ?>>Kadaluarsa</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Method Filter -->
+                        <div class="filter-group">
+                            <label class="filter-label">Metode</label>
+                            <select name="method" class="filter-select">
+                                <option value="" <?= empty($filterMethod) ? 'selected' : ''; ?>>Semua Metode</option>
+                                <option value="qris" <?= $filterMethod === 'qris' ? 'selected' : ''; ?>>QRIS</option>
+                                <option value="conversion" <?= $filterMethod === 'conversion' ? 'selected' : ''; ?>>Konversi</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Search Filter -->
+                        <div class="filter-group">
+                            <label class="filter-label">Pencarian</label>
+                            <input type="text" name="search" value="<?= htmlspecialchars($filterSearch); ?>" 
+                                   placeholder="ID Deposit atau Jumlah..." class="filter-input">
+                        </div>
+                        
+                        <!-- Year Filter -->
+                        <div class="filter-group">
+                            <label class="filter-label">Tahun</label>
+                            <div class="filter-date-group">
                                 <select name="year" class="filter-select">
                                     <option value="">Semua Tahun</option>
                                     <?php foreach ($availableYears as $year): ?>
@@ -1193,61 +1464,88 @@ try {
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            
-                            <!-- Status Filter -->
-                            <div>
-                                <label class="filter-label">Status</label>
-                                <select name="status" class="filter-select">
-                                    <option value="">Semua Status</option>
-                                    <option value="pending" <?= $filterStatus === 'pending' ? 'selected' : ''; ?>>Menunggu</option>
-                                    <option value="success" <?= $filterStatus === 'success' ? 'selected' : ''; ?>>Berhasil</option>
-                                    <option value="failed" <?= $filterStatus === 'failed' ? 'selected' : ''; ?>>Gagal</option>
-                                    <option value="expired" <?= $filterStatus === 'expired' ? 'selected' : ''; ?>>Kadaluarsa</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Method Filter -->
-                            <div>
-                                <label class="filter-label">Metode Pembayaran</label>
-                                <select name="method" class="filter-select">
-                                    <option value="">Semua Metode</option>
-                                    <option value="qris" <?= $filterMethod === 'qris' ? 'selected' : ''; ?>>QRIS</option>
-                                    <option value="conversion" <?= $filterMethod === 'conversion' ? 'selected' : ''; ?>>Konversi</option>
-                                </select>
-                            </div>
                         </div>
                         
-                        <!-- Search Box -->
-                        <div class="filter-search-group">
-                            <div class="filter-search-box">
-                                <label class="filter-label">Cari berdasarkan ID Deposit, Jumlah, atau Total Bayar</label>
-                                <input 
-                                    type="text" 
-                                    name="search" 
-                                    class="filter-input" 
-                                    placeholder="Contoh: 12345 atau 10000"
-                                    value="<?= htmlspecialchars($filterSearch); ?>"
-                                >
-                            </div>
-                            <button type="submit" class="filter-btn">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <!-- Actions -->
+                        <div class="filter-actions">
+                            <button type="submit" class="filter-btn filter-btn-primary">
+                                <svg viewBox="0 0 24 24">
                                     <circle cx="11" cy="11" r="8"/>
                                     <path d="m21 21-4.35-4.35"/>
                                 </svg>
-                                Cari
+                                Filter
                             </button>
-                            <button type="button" class="filter-btn filter-reset" onclick="resetFilters()">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <button type="button" class="filter-btn filter-btn-secondary" onclick="clearFilters()">
+                                <svg viewBox="0 0 24 24">
                                     <path d="M3 6h18"/>
                                     <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
                                     <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                                    <line x1="10" y1="11" x2="10" y2="17"/>
-                                    <line x1="14" y1="11" x2="14" y2="17"/>
                                 </svg>
                                 Reset
                             </button>
                         </div>
                     </form>
+                    
+                    <!-- Active Filters -->
+                    <?php if (!empty($filterStatus) || !empty($filterMethod) || !empty($filterSearch) || !empty($filterYear)): ?>
+                    <div class="active-filters">
+                        <?php if (!empty($filterStatus)): ?>
+                        <span class="filter-tag">
+                            Status: <?php 
+                                $statusLabels = [
+                                    'pending' => 'Menunggu',
+                                    'success' => 'Berhasil',
+                                    'failed' => 'Gagal',
+                                    'expired' => 'Kadaluarsa'
+                                ];
+                                echo $statusLabels[$filterStatus] ?? ucfirst($filterStatus);
+                            ?>
+                            <button type="button" class="filter-tag-remove" onclick="removeFilter('status')">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                            </button>
+                        </span>
+                        <?php endif; ?>
+                        
+                        <?php if (!empty($filterMethod)): ?>
+                        <span class="filter-tag">
+                            Metode: <?= $filterMethod === 'qris' ? 'QRIS' : 'Konversi'; ?>
+                            <button type="button" class="filter-tag-remove" onclick="removeFilter('method')">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                            </button>
+                        </span>
+                        <?php endif; ?>
+                        
+                        <?php if (!empty($filterSearch)): ?>
+                        <span class="filter-tag">
+                            Pencarian: <?= htmlspecialchars($filterSearch); ?>
+                            <button type="button" class="filter-tag-remove" onclick="removeFilter('search')">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                            </button>
+                        </span>
+                        <?php endif; ?>
+                        
+                        <?php if (!empty($filterYear)): ?>
+                        <span class="filter-tag">
+                            Tahun: <?= htmlspecialchars($filterYear); ?>
+                            <button type="button" class="filter-tag-remove" onclick="removeFilter('year')">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                            </button>
+                        </span>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="deposits-table-card">
@@ -1380,11 +1678,57 @@ try {
         document.addEventListener('DOMContentLoaded', function() {
             initializeSidebar();
             initializeProfile();
+            initializeFilters();
         });
 
         // Reset all filters
         function resetFilters() {
             window.location.href = 'deposit_history.php';
+        }
+        
+        // Filter functionality
+        function initializeFilters() {
+            const filterToggle = document.getElementById('filterToggle');
+            const filterForm = document.getElementById('filterForm');
+            
+            if (filterToggle && filterForm) {
+                filterToggle.addEventListener('click', function() {
+                    filterForm.classList.toggle('collapsed');
+                    filterToggle.classList.toggle('collapsed');
+                    
+                    if (filterForm.classList.contains('collapsed')) {
+                        filterToggle.innerHTML = `
+                            <svg viewBox="0 0 24 24">
+                                <polyline points="6,9 12,15 18,9"/>
+                            </svg>
+                            Tampilkan
+                        `;
+                    } else {
+                        filterToggle.innerHTML = `
+                            <svg viewBox="0 0 24 24">
+                                <polyline points="6,9 12,15 18,9"/>
+                            </svg>
+                            Sembunyikan
+                        `;
+                    }
+                });
+            }
+        }
+        
+        // Clear all filters
+        function clearFilters() {
+            window.location.href = 'deposit_history.php';
+        }
+        
+        // Remove specific filter
+        function removeFilter(filterName) {
+            const url = new URL(window.location);
+            url.searchParams.delete(filterName);
+            if (filterName === 'search') {
+                url.searchParams.delete('search_type');
+            }
+            url.searchParams.set('page', '1');
+            window.location.href = url.toString();
         }
 
         // Sidebar functionality - SAMA PERSIS
