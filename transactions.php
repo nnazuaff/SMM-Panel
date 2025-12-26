@@ -1407,8 +1407,8 @@ try {
             padding: 0;
             max-width: 500px;
             width: 100%;
-            max-height: 90vh;
-            overflow: hidden;
+            max-height: none;
+            overflow: visible;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(16px);
             animation: modalSlideIn 0.3s ease-out;
@@ -1470,8 +1470,8 @@ try {
         
         .modal-body {
             padding: 24px;
-            max-height: calc(60vh - 120px);
-            overflow-y: auto;
+            max-height: none;
+            overflow-y: visible;
         }
         
         /* Modal responsive */
@@ -1485,7 +1485,7 @@ try {
             .modal-content {
                 max-width: none;
                 width: calc(100% - 40px);
-                max-height: 85vh;
+                max-height: none;
                 border-radius: 12px;
                 margin: auto;
             }
@@ -1500,7 +1500,6 @@ try {
             
             .modal-body {
                 padding: 20px;
-                max-height: calc(70vh - 100px);
             }
             
             .detail-item {
@@ -1530,7 +1529,7 @@ try {
             }
             
             .modal-content {
-                max-height: 80vh;
+                max-height: none;
                 border-radius: 10px;
                 width: calc(100% - 32px);
                 margin: auto;
@@ -1546,7 +1545,6 @@ try {
             
             .modal-body {
                 padding: 16px;
-                max-height: calc(75vh - 80px);
             }
             
             .detail-item {
@@ -1591,7 +1589,7 @@ try {
             }
             
             .modal-content {
-                max-height: 75vh;
+                max-height: none;
                 width: calc(100% - 24px);
                 border-radius: 8px;
                 margin: auto;
@@ -1607,7 +1605,6 @@ try {
             
             .modal-body {
                 padding: 12px;
-                max-height: calc(80vh - 60px);
             }
             
             .detail-label {
