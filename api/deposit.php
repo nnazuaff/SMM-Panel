@@ -69,6 +69,12 @@ try {
             $amount = floatval($input['amount']);
             $uniqueCode = intval($input['unique_code']);
             $finalAmount = floatval($input['final_amount']);
+            $paymentMethod = $input['payment_method'] ?? 'qris';
+            
+            // Validate payment method
+            if (!in_array($paymentMethod, ['qris', 'conversion'])) {
+                $paymentMethod = 'qris';
+            }
             
             // Validate amount range
             if ($amount < 1000) {
@@ -94,7 +100,7 @@ try {
             }
             
             // Submit deposit request
-            $result = submitDepositRequest($user['id'], $amount, $uniqueCode, $finalAmount);
+            $result = submitDepositRequest($user['id'], $amount, $uniqueCode, $finalAmount, $paymentMethod);
             
             if ($result['success']) {
                 echo json_encode([

@@ -24,6 +24,7 @@ function setupDepositsTable() {
             amount DECIMAL(10,2) NOT NULL,
             unique_code INT NOT NULL,
             final_amount DECIMAL(10,2) NOT NULL,
+            payment_method ENUM('qris', 'conversion') DEFAULT 'qris',
             payment_proof VARCHAR(255) NULL,
             status ENUM('pending', 'success', 'failed', 'expired') DEFAULT 'pending',
             admin_notes TEXT NULL,
@@ -38,6 +39,13 @@ function setupDepositsTable() {
             UNIQUE KEY unique_amount_active (final_amount, status, created_at),
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
+        
+        // Add payment_method column if it doesn't exist (for existing tables)
+        try {
+            $pdo->exec("ALTER TABLE deposits ADD COLUMN payment_method ENUM('qris', 'conversion') DEFAULT 'qris' AFTER final_amount");
+        } catch (PDOException $e) {
+            // Column already exists, ignore
+        }
         
         return true;
     } catch (PDOException $e) {
@@ -55,9 +63,10 @@ setupDepositsTable();
  * @param float $amount Base amount
  * @param int $uniqueCode Unique code (100-200)
  * @param float $finalAmount Total amount (base + unique code)
+ * @param string $paymentMethod Payment method (qris or conversion)
  * @return array Result with success status and message
  */
-function submitDepositRequest($userId, $amount, $uniqueCode, $finalAmount) {
+function submitDepositRequest($userId, $amount, $uniqueCode, $finalAmount, $paymentMethod = 'qris') {
     $pdo = getDBConnection();
     if (!$pdo) {
         return ['success' => false, 'message' => 'Database connection failed'];
@@ -72,6 +81,11 @@ function submitDepositRequest($userId, $amount, $uniqueCode, $finalAmount) {
         
         if ($amount > 200000) {
             return ['success' => false, 'message' => 'Maksimal deposit adalah Rp 200.000'];
+        }
+        
+        // Validate payment method
+        if (!in_array($paymentMethod, ['qris', 'conversion'])) {
+            $paymentMethod = 'qris';
         }
         
         // Check if user has pending deposit within last 30 minutes
@@ -101,8 +115,8 @@ function submitDepositRequest($userId, $amount, $uniqueCode, $finalAmount) {
         $expiredAt = date('Y-m-d H:i:s', strtotime('+24 hours'));
         
         // Insert deposit request
-        $stmt = $pdo->prepare("INSERT INTO deposits (user_id, amount, unique_code, final_amount, status, expired_at) VALUES (?, ?, ?, ?, 'pending', ?)");
-        $stmt->execute([$userId, $amount, $uniqueCode, $finalAmount, $expiredAt]);
+        $stmt = $pdo->prepare("INSERT INTO deposits (user_id, amount, unique_code, final_amount, payment_method, status, expired_at) VALUES (?, ?, ?, ?, ?, 'pending', ?)");
+        $stmt->execute([$userId, $amount, $uniqueCode, $finalAmount, $paymentMethod, $expiredAt]);
         
         $depositId = $pdo->lastInsertId();
         

@@ -574,6 +574,30 @@ try {
             font-family: 'Courier New', monospace;
         }
         
+        .payment-method {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .payment-method svg {
+            flex-shrink: 0;
+        }
+        
+        .method-qris {
+            background: rgba(20, 184, 166, 0.15);
+            color: var(--teal-300);
+        }
+        
+        .method-conversion {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+        }
+        
         .deposit-status {
             display: inline-flex;
             align-items: center;
@@ -936,7 +960,8 @@ try {
                                         <th>Jumlah</th>
                                         <th>Kode Unik</th>
                                         <th>Total Bayar</th>
-                                        <th>Status</th>
+                                        <th>Metode</th>
+                                        <th></th>Status</th>
                                         <th>Tanggal</th>
                                     </tr>
                                 </thead>
@@ -954,6 +979,20 @@ try {
                                             </td>
                                             <td>
                                                 <span class="deposit-amount">Rp <?= number_format($deposit['final_amount'], 0, ',', '.'); ?></span>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                $paymentMethod = $deposit['payment_method'] ?? 'qris';
+                                                $methodClass = 'method-' . $paymentMethod;
+                                                $methodText = $paymentMethod === 'qris' ? 'QRIS' : 'Konversi';
+                                                $methodIcon = $paymentMethod === 'qris' 
+                                                    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg>'
+                                                    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12M17 20l4-4M17 20l-4-4"/></svg>';
+                                                ?>
+                                                <span class="payment-method <?= $methodClass; ?>">
+                                                    <?= $methodIcon; ?>
+                                                    <?= $methodText; ?>
+                                                </span>
                                             </td>
                                             <td>
                                                 <?php
