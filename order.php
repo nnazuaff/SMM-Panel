@@ -1322,7 +1322,7 @@ require_once __DIR__ . '/api/MedanpediaAPI.php';
                             <div class="form-row full">
                                 <div class="form-group">
                                     <label class="form-label" for="category">Kategori</label>
-                                    <select class="form-select searchable-hidden-select" id="category" name="category" required>
+                                    <select class="form-select searchable-hidden-select" id="category" name="category">
                                         <option value="">Pilih Kategori...</option>
                                     </select>
                                     <div id="categorySearchable"></div>
@@ -1333,7 +1333,7 @@ require_once __DIR__ . '/api/MedanpediaAPI.php';
                             <div class="form-row full">
                                 <div class="form-group">
                                     <label class="form-label" for="service">Layanan</label>
-                                    <select class="form-select searchable-hidden-select" id="service" name="service" required>
+                                    <select class="form-select searchable-hidden-select" id="service" name="service">
                                         <option value="">Pilih kategori terlebih dahulu...</option>
                                     </select>
                                     <div id="serviceSearchable"></div>
