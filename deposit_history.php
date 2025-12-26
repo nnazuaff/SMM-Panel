@@ -961,7 +961,7 @@ try {
                                         <th>Kode Unik</th>
                                         <th>Total Bayar</th>
                                         <th>Metode</th>
-                                        <th></th>Status</th>
+                                        <th>Status</th>
                                         <th>Tanggal</th>
                                     </tr>
                                 </thead>
