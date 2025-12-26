@@ -828,34 +828,6 @@ $sectionTitle = 'Top Up Saldo';
             transform: scale(0.95);
         }
         
-        .btn-confirm-amount {
-            width: 100%;
-            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 12px;
-            box-shadow: 0 2px 8px rgba(20, 184, 166, 0.2);
-        }
-        
-        .btn-confirm-amount:hover {
-            background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
-            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
-            transform: translateY(-1px);
-        }
-        
-        .btn-confirm-amount:active {
-            transform: translateY(0);
-        }
-        
         .unique-code-info {
             color: var(--slate-400);
             font-size: 12px;
@@ -1744,14 +1716,6 @@ $sectionTitle = 'Top Up Saldo';
                                         <span>Minimal: Rp 1.000</span>
                                         <span>Maksimal: Rp 200.000</span>
                                     </div>
-                                    
-                                    <!-- Confirm Amount Button -->
-                                    <button type="button" id="confirmAmountBtn" class="btn-confirm-amount" style="display: none;">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 6px;">
-                                            <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                        Konfirmasi Nominal & Generate Kode Unik
-                                    </button>
                                 </div>
                                 
                                 <!-- Unique Code Section -->
@@ -2114,7 +2078,6 @@ $sectionTitle = 'Top Up Saldo';
             const uniqueCodeSection = document.getElementById('uniqueCodeSection');
             const finalAmount = document.getElementById('finalAmount');
             const copyAmountBtn = document.getElementById('copyAmountBtn');
-            const confirmAmountBtn = document.getElementById('confirmAmountBtn');
             
             // Conversion elements
             const acisUsernameInput = document.getElementById('acisUsername');
@@ -2254,39 +2217,11 @@ $sectionTitle = 'Top Up Saldo';
                 return code;
             }
 
-            // Store base amount and show confirm button instead of auto-generating code
-            let pendingAmount = 0;
-            
+            // Store selected amount (kode unik akan di-generate saat klik Lanjutkan)
             function updateFinalAmount(baseAmount) {
-                pendingAmount = baseAmount;
-                if (baseAmount > 0) {
-                    // Show preview without unique code
-                    uniqueCodeSection.style.display = 'none';
-                    confirmAmountBtn.style.display = 'block';
-                } else {
-                    uniqueCodeSection.style.display = 'none';
-                    confirmAmountBtn.style.display = 'none';
-                    finalAmountWithCode = 0;
-                }
+                selectedAmount = baseAmount;
+                // Tidak show kode unik di sini, akan muncul di modal saat klik Lanjutkan
             }
-            
-            // Generate and display final amount with unique code
-            function confirmAndGenerateCode() {
-                if (pendingAmount > 0) {
-                    uniqueCode = generateUniqueCode();
-                    finalAmountWithCode = pendingAmount + uniqueCode;
-                    finalAmount.textContent = `Rp ${finalAmountWithCode.toLocaleString('id-ID')}`;
-                    uniqueCodeSection.style.display = 'block';
-                    confirmAmountBtn.style.display = 'none';
-                }
-            }
-            
-            // Confirm amount button handler
-            confirmAmountBtn.addEventListener('click', function() {
-                if (pendingAmount > 0) {
-                    confirmAndGenerateCode();
-                }
-            });
 
             // Copy amount to clipboard
             copyAmountBtn.addEventListener('click', function() {
@@ -2361,6 +2296,9 @@ $sectionTitle = 'Top Up Saldo';
 
             // QRIS Modal Functions
             function openQrisModal() {
+                // Generate kode unik baru setiap kali modal dibuka
+                uniqueCode = generateUniqueCode();
+                finalAmountWithCode = selectedAmount + uniqueCode;
                 qrisAmountDisplay.textContent = `Rp ${finalAmountWithCode.toLocaleString('id-ID')}`;
                 qrisModal.classList.add('show');
                 document.body.style.overflow = 'hidden';
