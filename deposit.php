@@ -1780,13 +1780,14 @@ $sectionTitle = 'Top Up Saldo';
                                         name="phoneNumber" 
                                         class="form-input" 
                                         placeholder="08xxxxxxxxxx"
-                                        pattern="[0-9]{10,13}"
+                                        pattern="[0-9]{10,20}"
                                         inputmode="numeric"
+                                        maxlength="20"
                                         required
                                         onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length > 20) this.value = this.value.slice(0,20);"
                                     >
-                                    <div class="input-hint">Nomor HP yang terdaftar di AcisPayment</div>
+                                    <div class="input-hint">Nomor HP yang terdaftar di AcisPayment (maks. 20 digit)</div>
                                 </div>
                                 
                                 <div class="form-group">
@@ -2155,18 +2156,84 @@ $sectionTitle = 'Top Up Saldo';
                 const phone = phoneNumberInput.value.trim();
                 const email = emailInput.value.trim();
                 const amountRaw = conversionAmountInput.value.replace(/\./g, '');
-                const amount = parseFloat(amountRaw) || 0;
+                const amount = parseInt(amountRaw) || 0;
                 
-                // Email validation regex
-                const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
-                const isEmailValid = emailRegex.test(email);
+                // Clear previous errors
+                clearConversionErrors();
                 
-                // Phone validation (10-13 digits)
-                const isPhoneValid = /^[0-9]{10,13}$/.test(phone);
+                let isValid = true;
                 
-                // All fields required and amount valid
-                const isValid = username && phone && isPhoneValid && email && isEmailValid && amount >= 1000 && amount <= 10000000;
+                // Username validation
+                if (!username) {
+                    isValid = false;
+                }
+                
+                // Phone validation (10-20 digits)
+                if (!phone) {
+                    isValid = false;
+                } else if (phone.length < 10) {
+                    showConversionError(phoneNumberInput, 'Nomor HP minimal 10 digit');
+                    isValid = false;
+                } else if (phone.length > 20) {
+                    showConversionError(phoneNumberInput, 'Nomor HP maksimal 20 digit');
+                    isValid = false;
+                } else if (!/^[0-9]{10,20}$/.test(phone)) {
+                    showConversionError(phoneNumberInput, 'Nomor HP hanya boleh berisi angka');
+                    isValid = false;
+                }
+                
+                // Email validation
+                if (!email) {
+                    isValid = false;
+                } else {
+                    const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+                    if (!emailRegex.test(email)) {
+                        showConversionError(emailInput, 'Format email tidak valid');
+                        isValid = false;
+                    }
+                }
+                
+                // Amount validation
+                if (amount === 0 || isNaN(amount)) {
+                    isValid = false;
+                } else if (amount < 1000) {
+                    showConversionError(conversionAmountInput, 'Nominal minimal Rp 1.000');
+                    isValid = false;
+                } else if (amount > 10000000) {
+                    showConversionError(conversionAmountInput, 'Nominal maksimal Rp 10.000.000');
+                    isValid = false;
+                }
+                
                 submitBtn.disabled = !isValid;
+            }
+            
+            // Show conversion form error
+            function showConversionError(inputElement, message) {
+                inputElement.style.borderColor = '#ef4444';
+                
+                // Remove existing error
+                const existingError = inputElement.parentNode.querySelector('.error-message');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                // Add error message
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.style.cssText = 'color: #ef4444; font-size: 12px; margin-top: 6px; display: block;';
+                errorDiv.textContent = message;
+                inputElement.parentNode.appendChild(errorDiv);
+            }
+            
+            // Clear all conversion form errors
+            function clearConversionErrors() {
+                [acisUsernameInput, phoneNumberInput, emailInput, conversionAmountInput].forEach(input => {
+                    input.style.borderColor = '';
+                    const error = input.parentNode.querySelector('.error-message');
+                    if (error) {
+                        error.remove();
+                    }
+                });
             }
             
             // Listen to conversion input changes

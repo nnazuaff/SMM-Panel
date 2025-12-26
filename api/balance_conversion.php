@@ -74,7 +74,24 @@ try {
             $acispaymentUsername = trim($input['acispayment_username']);
             $phoneNumber = trim($input['phone_number']);
             $email = trim($input['email']);
-            $amount = floatval($input['amount']);
+            $amount = intval($input['amount']); // Use intval instead of floatval for consistency
+            
+            // Validate phone number (10-20 digits)
+            if (strlen($phoneNumber) < 10 || strlen($phoneNumber) > 20) {
+                echo json_encode(['success' => false, 'message' => 'Nomor HP harus antara 10-20 digit']);
+                exit();
+            }
+            
+            if (!preg_match('/^[0-9]{10,20}$/', $phoneNumber)) {
+                echo json_encode(['success' => false, 'message' => 'Nomor HP hanya boleh berisi angka']);
+                exit();
+            }
+            
+            // Validate email format
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo json_encode(['success' => false, 'message' => 'Format email tidak valid']);
+                exit();
+            }
             
             // Validate amount
             if ($amount < 1000) {

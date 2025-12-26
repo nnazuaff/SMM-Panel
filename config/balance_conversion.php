@@ -95,6 +95,14 @@ function submitConversionRequest($userId, $acispaymentUsername, $phoneNumber, $e
             return ['success' => false, 'message' => 'Nomor HP harus diisi'];
         }
         
+        if (strlen($phoneNumber) < 10 || strlen($phoneNumber) > 20) {
+            return ['success' => false, 'message' => 'Nomor HP harus antara 10-20 digit'];
+        }
+        
+        if (!preg_match('/^[0-9]{10,20}$/', $phoneNumber)) {
+            return ['success' => false, 'message' => 'Nomor HP hanya boleh berisi angka'];
+        }
+        
         // Validate email
         $email = trim($email);
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
