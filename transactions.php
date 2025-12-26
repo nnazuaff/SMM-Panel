@@ -213,6 +213,8 @@ try {
         .dashboard-layout {
             display: flex;
             min-height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
         }
         
         /* Sidebar Enhanced - SAMA PERSIS */
@@ -381,6 +383,10 @@ try {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             min-height: 100vh;
             background: var(--navy-900);
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            box-sizing: border-box;
         }
         
         .main-content.collapsed {
@@ -676,6 +682,8 @@ try {
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
         }
         
         .transactions-title {
@@ -716,6 +724,7 @@ try {
             align-items: center;
             font-size: 14px;
             color: var(--slate-300);
+            flex-wrap: wrap;
         }
         
         .stat-item {
@@ -1898,7 +1907,8 @@ try {
             
             .transactions-table {
                 font-size: 12px;
-                min-width: 800px;
+                min-width: 100%;
+                width: 100%;
             }
             
             .transactions-table th,
@@ -1946,7 +1956,8 @@ try {
             
             .transactions-table {
                 font-size: 11px;
-                min-width: 700px;
+                min-width: 100%;
+                width: 100%;
             }
             
             .transactions-table th,
@@ -2046,7 +2057,7 @@ try {
             .transactions-table {
                 font-size: 13px;
                 min-width: 700px;
-                width: 700px; /* Fixed width for consistent scrolling */
+                width: 100%;
             }
             
             .transactions-table th,
@@ -2207,7 +2218,7 @@ try {
             .transactions-table {
                 font-size: 12px;
                 min-width: 650px;
-                width: 650px;
+                width: 100%;
             }
             
             .transactions-table th,
@@ -2364,7 +2375,7 @@ try {
             .transactions-table {
                 font-size: 11px;
                 min-width: 600px;
-                width: 600px;
+                width: 100%;
             }
             
             .transactions-table th,
