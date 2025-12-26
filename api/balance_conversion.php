@@ -104,12 +104,15 @@ try {
                 exit();
             }
             
-            // Calculate conversion fee (0.7%)
-            $conversionFee = $amount * 0.007;
-            $finalAmount = $amount - $conversionFee;
+            // Calculate conversion fee (0.7% - ditanggung user)
+            // User transfer: amount + fee
+            // Saldo masuk: amount (sesuai input)
+            $conversionFee = ceil($amount * 0.007); // Round up
+            $totalTransfer = $amount + $conversionFee; // Total yang harus ditransfer user
+            $finalAmount = $amount; // Yang masuk ke SMM Panel (sesuai input user)
             
             // Submit conversion request
-            $result = submitConversionRequest($user['id'], $acispaymentUsername, $phoneNumber, $email, $amount, $conversionFee, $finalAmount);
+            $result = submitConversionRequest($user['id'], $acispaymentUsername, $phoneNumber, $email, $amount, $conversionFee, $finalAmount, $totalTransfer);
             
             if ($result['success']) {
                 echo json_encode([
@@ -122,6 +125,8 @@ try {
                         'formatted_amount' => 'Rp ' . number_format($amount, 0, ',', '.'),
                         'conversion_fee' => $conversionFee,
                         'formatted_fee' => 'Rp ' . number_format($conversionFee, 0, ',', '.'),
+                        'total_transfer' => $totalTransfer,
+                        'formatted_total_transfer' => 'Rp ' . number_format($totalTransfer, 0, ',', '.'),
                         'final_amount' => $finalAmount,
                         'formatted_final_amount' => 'Rp ' . number_format($finalAmount, 0, ',', '.')
                     ]

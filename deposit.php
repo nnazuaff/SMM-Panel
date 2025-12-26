@@ -1831,13 +1831,35 @@ $sectionTitle = 'Top Up Saldo';
                                         <span>Minimal: Rp 1.000</span>
                                         <span>Maksimal: Rp 10.000.000</span>
                                     </div>
-                                    <div class="fee-info" style="margin-top: 8px; padding: 8px 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; font-size: 12px; color: #fbbf24;">
+                                    <div class="fee-info" style="margin-top: 8px; padding: 10px 14px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; font-size: 12px; color: #fbbf24; line-height: 1.6;">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
                                             <circle cx="12" cy="12" r="10" stroke-width="2"/>
                                             <line x1="12" y1="16" x2="12" y2="12" stroke-width="2"/>
                                             <line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2"/>
                                         </svg>
-                                        Biaya konversi <strong>0,7%</strong> akan dipotong dari nominal yang Anda masukkan
+                                        Biaya konversi <strong>0,7%</strong> ditanggung user. Contoh: input Rp 1.000 → Anda transfer <strong>Rp 1.007</strong> dari AcisPayment → Saldo masuk ke SMM Panel <strong>Rp 1.000</strong>
+                                    </div>
+                                    
+                                    <!-- Conversion Summary (shown after input) -->
+                                    <div id="conversionSummary" style="display: none; margin-top: 12px; padding: 12px; background: rgba(20, 184, 166, 0.1); border: 1px solid rgba(20, 184, 166, 0.3); border-radius: 8px;">
+                                        <div style="font-size: 13px; color: var(--teal-300); margin-bottom: 8px; font-weight: 600;">Ringkasan Konversi:</div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--slate-300); margin-bottom: 4px;">
+                                            <span>Nominal yang diminta:</span>
+                                            <span id="summaryAmount">Rp 0</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--slate-300); margin-bottom: 4px;">
+                                            <span>Biaya konversi (0,7%):</span>
+                                            <span id="summaryFee">Rp 0</span>
+                                        </div>
+                                        <div style="border-top: 1px solid rgba(20, 184, 166, 0.3); margin: 8px 0; padding-top: 8px;"></div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--teal-200); font-weight: 600;">
+                                            <span>Total yang harus Anda transfer:</span>
+                                            <span id="summaryTotal">Rp 0</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #4ade80; margin-top: 6px; font-weight: 500;">
+                                            <span>Saldo masuk ke SMM Panel:</span>
+                                            <span id="summaryFinal">Rp 0</span>
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -2093,6 +2115,11 @@ $sectionTitle = 'Top Up Saldo';
             const phoneNumberInput = document.getElementById('phoneNumber');
             const emailInput = document.getElementById('email');
             const conversionAmountInput = document.getElementById('conversionAmount');
+            const conversionSummary = document.getElementById('conversionSummary');
+            const summaryAmount = document.getElementById('summaryAmount');
+            const summaryFee = document.getElementById('summaryFee');
+            const summaryTotal = document.getElementById('summaryTotal');
+            const summaryFinal = document.getElementById('summaryFinal');
             
             // QRIS Modal elements
             const qrisModal = document.getElementById('qrisModal');
@@ -2196,12 +2223,26 @@ $sectionTitle = 'Top Up Saldo';
                 // Amount validation
                 if (amount === 0 || isNaN(amount)) {
                     isValid = false;
+                    conversionSummary.style.display = 'none';
                 } else if (amount < 1000) {
                     showConversionError(conversionAmountInput, 'Nominal minimal Rp 1.000');
                     isValid = false;
+                    conversionSummary.style.display = 'none';
                 } else if (amount > 10000000) {
                     showConversionError(conversionAmountInput, 'Nominal maksimal Rp 10.000.000');
                     isValid = false;
+                    conversionSummary.style.display = 'none';
+                } else {
+                    // Calculate and show conversion summary
+                    const fee = Math.ceil(amount * 0.007); // Round up biaya
+                    const totalTransfer = amount + fee;
+                    const finalAmount = amount; // Yang masuk ke user tetap sesuai input
+                    
+                    summaryAmount.textContent = 'Rp ' + amount.toLocaleString('id-ID');
+                    summaryFee.textContent = 'Rp ' + fee.toLocaleString('id-ID');
+                    summaryTotal.textContent = 'Rp ' + totalTransfer.toLocaleString('id-ID');
+                    summaryFinal.textContent = 'Rp ' + finalAmount.toLocaleString('id-ID');
+                    conversionSummary.style.display = 'block';
                 }
                 
                 submitBtn.disabled = !isValid;

@@ -23,6 +23,7 @@ function setupBalanceConversionTable() {
             email VARCHAR(255) NOT NULL,
             amount DECIMAL(10,2) NOT NULL,
             conversion_fee DECIMAL(10,2) NOT NULL DEFAULT 0,
+            total_transfer DECIMAL(10,2) NOT NULL DEFAULT 0,
             final_amount DECIMAL(10,2) NOT NULL,
             status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
             admin_notes TEXT NULL,
@@ -40,7 +41,8 @@ function setupBalanceConversionTable() {
             $pdo->exec("ALTER TABLE balance_conversions ADD COLUMN IF NOT EXISTS phone_number VARCHAR(20) NOT NULL AFTER acispayment_username");
             $pdo->exec("ALTER TABLE balance_conversions ADD COLUMN IF NOT EXISTS email VARCHAR(255) NOT NULL AFTER phone_number");
             $pdo->exec("ALTER TABLE balance_conversions ADD COLUMN IF NOT EXISTS conversion_fee DECIMAL(10,2) NOT NULL DEFAULT 0 AFTER amount");
-            $pdo->exec("ALTER TABLE balance_conversions ADD COLUMN IF NOT EXISTS final_amount DECIMAL(10,2) NOT NULL AFTER conversion_fee");
+            $pdo->exec("ALTER TABLE balance_conversions ADD COLUMN IF NOT EXISTS total_transfer DECIMAL(10,2) NOT NULL DEFAULT 0 AFTER conversion_fee");
+            $pdo->exec("ALTER TABLE balance_conversions ADD COLUMN IF NOT EXISTS final_amount DECIMAL(10,2) NOT NULL AFTER total_transfer");
         } catch (PDOException $e) {
             // Columns might already exist, ignore
         }
@@ -61,12 +63,13 @@ setupBalanceConversionTable();
  * @param string $acispaymentUsername Username in AcisPayment app
  * @param string $phoneNumber Phone number
  * @param string $email Email address
- * @param float $amount Amount to convert
- * @param float $conversionFee Fee charged (0.7%)
- * @param float $finalAmount Final amount after fee deduction
+ * @param float $amount Amount to convert (yang masuk ke user)
+ * @param float $conversionFee Fee charged (0.7% - ditanggung user)
+ * @param float $finalAmount Final amount that enters SMM Panel (= amount)
+ * @param float $totalTransfer Total amount user must transfer from AcisPayment (amount + fee)
  * @return array Result with success status and message
  */
-function submitConversionRequest($userId, $acispaymentUsername, $phoneNumber, $email, $amount, $conversionFee = 0, $finalAmount = 0) {
+function submitConversionRequest($userId, $acispaymentUsername, $phoneNumber, $email, $amount, $conversionFee = 0, $finalAmount = 0, $totalTransfer = 0) {
     $pdo = getDBConnection();
     if (!$pdo) {
         return ['success' => false, 'message' => 'Database connection failed'];
@@ -119,8 +122,8 @@ function submitConversionRequest($userId, $acispaymentUsername, $phoneNumber, $e
         }
         
         // Insert conversion request
-        $stmt = $pdo->prepare("INSERT INTO balance_conversions (user_id, acispayment_username, phone_number, email, amount, conversion_fee, final_amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')");
-        $stmt->execute([$userId, $acispaymentUsername, $phoneNumber, $email, $amount, $conversionFee, $finalAmount]);
+        $stmt = $pdo->prepare("INSERT INTO balance_conversions (user_id, acispayment_username, phone_number, email, amount, conversion_fee, total_transfer, final_amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')");
+        $stmt->execute([$userId, $acispaymentUsername, $phoneNumber, $email, $amount, $conversionFee, $totalTransfer, $finalAmount]);
         
         $requestId = $pdo->lastInsertId();
         
