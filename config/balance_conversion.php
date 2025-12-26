@@ -127,6 +127,23 @@ function submitConversionRequest($userId, $acispaymentUsername, $phoneNumber, $e
         
         $requestId = $pdo->lastInsertId();
         
+        // Also insert into deposits table for unified deposit history
+        require_once __DIR__ . '/deposit.php';
+        
+        // Generate a unique code for tracking (700-800 range for conversion)
+        $uniqueCode = ((int)$userId * 17 + time() % 101) + 700;
+        
+        // Set expiration time (7 days for conversion - longer than QRIS)
+        $expiredAt = date('Y-m-d H:i:s', strtotime('+7 days'));
+        
+        try {
+            $stmt = $pdo->prepare("INSERT INTO deposits (user_id, amount, unique_code, final_amount, payment_method, status, expired_at) VALUES (?, ?, ?, ?, 'conversion', 'pending', ?)");
+            $stmt->execute([$userId, $amount, $uniqueCode, $finalAmount, $expiredAt]);
+        } catch (PDOException $e) {
+            // Log but don't fail the conversion request
+            error_log('Failed to insert conversion into deposits table: ' . $e->getMessage());
+        }
+        
         return [
             'success' => true,
             'message' => 'Permintaan konversi berhasil dikirim. Menunggu persetujuan admin.',
@@ -172,5 +189,107 @@ function getUserConversionRequests($userId, $limit = 10) {
     } catch (PDOException $e) {
         error_log('Get conversion requests error: ' . $e->getMessage());
         return [];
+    }
+}
+
+/**
+ * Approve a conversion request and update balance
+ * Also updates the corresponding deposit record
+ * @param int $conversionId Conversion request ID
+ * @param int $processedBy Admin user ID who processed the request
+ * @param string $adminNotes Optional admin notes
+ * @return array Result with success status and message
+ */
+function approveConversionRequest($conversionId, $processedBy = null, $adminNotes = '') {
+    $pdo = getDBConnection();
+    if (!$pdo) {
+        return ['success' => false, 'message' => 'Database connection failed'];
+    }
+    
+    try {
+        $pdo->beginTransaction();
+        
+        // Get conversion request details
+        $stmt = $pdo->prepare("SELECT * FROM balance_conversions WHERE id = ? AND status = 'pending'");
+        $stmt->execute([$conversionId]);
+        $conversion = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$conversion) {
+            $pdo->rollBack();
+            return ['success' => false, 'message' => 'Permintaan konversi tidak ditemukan atau sudah diproses'];
+        }
+        
+        // Update balance
+        $stmt = $pdo->prepare("UPDATE user_balance SET balance = balance + ? WHERE user_id = ?");
+        $stmt->execute([$conversion['final_amount'], $conversion['user_id']]);
+        
+        // Update conversion status
+        $stmt = $pdo->prepare("UPDATE balance_conversions SET status = 'approved', admin_notes = ?, processed_by = ?, processed_at = NOW() WHERE id = ?");
+        $stmt->execute([$adminNotes, $processedBy, $conversionId]);
+        
+        // Update corresponding deposit record
+        $stmt = $pdo->prepare("UPDATE deposits SET status = 'success', admin_notes = ?, processed_by = ?, processed_at = NOW() WHERE user_id = ? AND payment_method = 'conversion' AND amount = ? AND status = 'pending' ORDER BY created_at DESC LIMIT 1");
+        $stmt->execute([$adminNotes, $processedBy, $conversion['user_id'], $conversion['amount']]);
+        
+        $pdo->commit();
+        
+        return [
+            'success' => true,
+            'message' => 'Konversi berhasil disetujui. Saldo telah ditambahkan.'
+        ];
+        
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        error_log('Approve conversion error: ' . $e->getMessage());
+        return ['success' => false, 'message' => 'Gagal menyetujui konversi: ' . $e->getMessage()];
+    }
+}
+
+/**
+ * Reject a conversion request
+ * Also updates the corresponding deposit record
+ * @param int $conversionId Conversion request ID
+ * @param int $processedBy Admin user ID who processed the request
+ * @param string $adminNotes Reason for rejection
+ * @return array Result with success status and message
+ */
+function rejectConversionRequest($conversionId, $processedBy = null, $adminNotes = 'Ditolak oleh admin') {
+    $pdo = getDBConnection();
+    if (!$pdo) {
+        return ['success' => false, 'message' => 'Database connection failed'];
+    }
+    
+    try {
+        $pdo->beginTransaction();
+        
+        // Get conversion request details
+        $stmt = $pdo->prepare("SELECT * FROM balance_conversions WHERE id = ? AND status = 'pending'");
+        $stmt->execute([$conversionId]);
+        $conversion = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$conversion) {
+            $pdo->rollBack();
+            return ['success' => false, 'message' => 'Permintaan konversi tidak ditemukan atau sudah diproses'];
+        }
+        
+        // Update conversion status
+        $stmt = $pdo->prepare("UPDATE balance_conversions SET status = 'rejected', admin_notes = ?, processed_by = ?, processed_at = NOW() WHERE id = ?");
+        $stmt->execute([$adminNotes, $processedBy, $conversionId]);
+        
+        // Update corresponding deposit record
+        $stmt = $pdo->prepare("UPDATE deposits SET status = 'failed', admin_notes = ?, processed_by = ?, processed_at = NOW() WHERE user_id = ? AND payment_method = 'conversion' AND amount = ? AND status = 'pending' ORDER BY created_at DESC LIMIT 1");
+        $stmt->execute([$adminNotes, $processedBy, $conversion['user_id'], $conversion['amount']]);
+        
+        $pdo->commit();
+        
+        return [
+            'success' => true,
+            'message' => 'Konversi berhasil ditolak.'
+        ];
+        
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        error_log('Reject conversion error: ' . $e->getMessage());
+        return ['success' => false, 'message' => 'Gagal menolak konversi: ' . $e->getMessage()];
     }
 }
