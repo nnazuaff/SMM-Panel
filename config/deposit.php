@@ -4,6 +4,9 @@
  * Handles QRIS deposit tracking with unique codes
  */
 
+// Set timezone to WIB (GMT+7)
+date_default_timezone_set('Asia/Jakarta');
+
 require_once __DIR__ . '/database.php';
 
 // Create deposits table

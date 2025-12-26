@@ -7,6 +7,9 @@ auth_refresh_balance();
 $user = auth_user();
 $activePage = 'deposit';
 $sectionTitle = 'Top Up Saldo';
+
+// Set timezone to WIB (GMT+7)
+date_default_timezone_set('Asia/Jakarta');
 ?>
 <!DOCTYPE html>
 <html lang="id">

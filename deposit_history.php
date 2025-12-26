@@ -7,6 +7,9 @@ $user = auth_user();
 $activePage = 'deposit_history';
 $sectionTitle = 'Riwayat Deposit';
 
+// Set timezone to WIB (GMT+7)
+date_default_timezone_set('Asia/Jakarta');
+
 // Get user's deposits from database
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/config/deposit.php';
@@ -967,7 +970,7 @@ try {
                                             </td>
                                             <td>
                                                 <span class="deposit-date">
-                                                    <?= date('d/m/Y H:i', strtotime($deposit['created_at'])); ?>
+                                                    <?= date('d/m/Y H:i', strtotime($deposit['created_at'])); ?> WIB
                                                 </span>
                                             </td>
                                         </tr>
