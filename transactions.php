@@ -2653,13 +2653,6 @@ try {
             
             <!-- Content Area - TRANSACTIONS CONTENT -->
             <div class="content-area">
-                <!-- Transactions Header -->
-                <div class="transactions-header">
-                    <div class="transactions-title">
-                    </div>
-                    
-                </div>
-                
                 <!-- Filter Section -->
                 <div class="filter-section">
                     <div class="filter-header">
