@@ -1393,6 +1393,7 @@ try {
             backdrop-filter: blur(4px);
             padding: 20px;
             box-sizing: border-box;
+            overflow-y: auto;
         }
         
         .modal-overlay.show {
@@ -1406,12 +1407,13 @@ try {
             padding: 0;
             max-width: 500px;
             width: 100%;
-            max-height: calc(100vh - 40px);
+            max-height: 90vh;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(16px);
             animation: modalSlideIn 0.3s ease-out;
             margin: auto;
+            position: relative;
         }
         
         @keyframes modalSlideIn {
@@ -1475,17 +1477,17 @@ try {
         /* Modal responsive */
         @media (max-width: 768px) {
             .modal-overlay {
-                padding: 16px;
-                align-items: flex-start;
-                padding-top: 60px; /* Account for header */
+                padding: 20px;
+                align-items: center;
+                justify-content: center;
             }
             
             .modal-content {
                 max-width: none;
-                width: 100%;
-                max-height: calc(100vh - 80px);
+                width: calc(100% - 40px);
+                max-height: 85vh;
                 border-radius: 12px;
-                margin: 0;
+                margin: auto;
             }
             
             .modal-header {
@@ -1522,13 +1524,16 @@ try {
         
         @media (max-width: 480px) {
             .modal-overlay {
-                padding: 12px;
-                padding-top: 50px;
+                padding: 16px;
+                align-items: center;
+                justify-content: center;
             }
             
             .modal-content {
-                max-height: calc(100vh - 60px);
-                border-radius: 8px;
+                max-height: 80vh;
+                border-radius: 10px;
+                width: calc(100% - 32px);
+                margin: auto;
             }
             
             .modal-header {
@@ -1580,12 +1585,16 @@ try {
         
         @media (max-width: 360px) {
             .modal-overlay {
-                padding: 8px;
-                padding-top: 40px;
+                padding: 12px;
+                align-items: center;
+                justify-content: center;
             }
             
             .modal-content {
-                max-height: calc(100vh - 50px);
+                max-height: 75vh;
+                width: calc(100% - 24px);
+                border-radius: 8px;
+                margin: auto;
             }
             
             .modal-header {
@@ -3353,6 +3362,11 @@ try {
             
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
+            
+            // Scroll modal overlay to top to ensure modal is visible
+            setTimeout(() => {
+                modal.scrollTop = 0;
+            }, 10);
         }
         
         function closeOrderDetail() {
