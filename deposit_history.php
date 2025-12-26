@@ -214,8 +214,9 @@ try {
         .main-content {
             flex: 1;
             margin-left: 280px;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             min-height: 100vh;
+            background: var(--navy-900);
         }
 
         .sidebar.collapsed ~ .main-content {
@@ -224,56 +225,59 @@ try {
 
         /* Top Header */
         .top-header {
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-            padding: 1rem 2rem;
+            background: rgba(255,255,255,.05);
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            padding: 16px 24px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 4500;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 16px;
         }
 
         .hamburger-btn {
             display: none;
             background: none;
             border: none;
-            padding: 0.5rem;
+            padding: 8px;
             cursor: pointer;
             border-radius: 6px;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
         }
 
         .hamburger-btn:hover {
-            background: var(--gray-100);
+            background: rgba(255,255,255,.06);
+            transform: scale(1.05);
+        }
+
+        .hamburger-btn:hover .hamburger span {
+            background: var(--teal-500);
         }
 
         .hamburger {
             width: 20px;
-            height: 14px;
-            position: relative;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
         }
 
         .hamburger span {
-            display: block;
             width: 100%;
             height: 2px;
-            background: var(--gray-700);
+            background: var(--slate-100);
             border-radius: 1px;
-            position: absolute;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-
-        .hamburger span:nth-child(1) { top: 0; }
-        .hamburger span:nth-child(2) { top: 6px; }
-        .hamburger span:nth-child(3) { top: 12px; }
 
         .hamburger.active span:nth-child(1) {
             transform: rotate(45deg);
@@ -290,171 +294,175 @@ try {
         }
 
         .page-title {
-            font-size: 1.5rem;
+            font-size: 24px;
             font-weight: 600;
-            color: var(--gray-900);
+            color: var(--slate-100);
             margin: 0;
         }
 
         .header-right {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 16px;
         }
 
         .profile-dropdown {
             position: relative;
+            z-index: 2500;
         }
 
         .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
             background: none;
             border: none;
-            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
         }
 
         .profile-btn:hover {
-            background: var(--gray-100);
+            background: rgba(255,255,255,.06);
         }
 
         .profile-avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: var(--teal-500);
+            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 14px;
         }
 
         .profile-menu {
             position: absolute;
             top: 100%;
             right: 0;
-            width: 280px;
-            background: white;
-            border: 1px solid var(--gray-200);
+            background: rgba(15,25,40,.85);
+            border: 1px solid rgba(255,255,255,.08);
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s;
-            z-index: 1000;
+            box-shadow: 0 10px 32px -4px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05);
+            backdrop-filter: blur(16px) saturate(140%);
+            min-width: 280px;
+            z-index: 6000;
+            margin-top: 8px;
+            display: none;
         }
 
         .profile-menu.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+            display: block;
         }
 
         .profile-menu-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--gray-100);
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
         }
 
         .profile-info {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 12px;
         }
 
         .profile-details h4 {
-            font-size: 1rem;
             font-weight: 600;
-            color: var(--gray-900);
+            font-size: 14px;
+            color: var(--slate-100);
             margin: 0;
         }
 
         .profile-details p {
-            font-size: 0.875rem;
-            color: var(--gray-500);
-            margin: 0.25rem 0 0 0;
+            font-size: 12px;
+            color: var(--slate-300);
+            margin: 0;
         }
 
         .balance-info {
-            margin-top: 1rem;
-            padding: 0.75rem;
-            background: var(--teal-50);
-            border: 1px solid var(--teal-200);
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: rgba(20,184,166,.12);
+            border: 1px solid rgba(20,184,166,.25);
             border-radius: 8px;
-            text-align: center;
+            font-size: 12px;
+            color: var(--teal-300);
         }
 
         .balance-info .balance-amount {
             font-size: 1.125rem;
             font-weight: 600;
-            color: var(--teal-700);
+            color: var(--teal-300);
         }
 
         .balance-info .balance-label {
-            font-size: 0.75rem;
-            color: var(--teal-600);
+            font-size: 12px;
+            color: var(--teal-300);
             margin-top: 0.25rem;
         }
 
         .profile-menu-links {
-            padding: 0.5rem 0;
+            padding: 8px;
         }
 
         .profile-menu-links a {
-            display: block;
-            padding: 0.75rem 1.5rem;
-            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--slate-200);
+            font-size: 13px;
             text-decoration: none;
-            transition: background 0.3s;
+            transition: background 0.2s;
         }
 
         .profile-menu-links a:hover {
-            background: var(--gray-50);
+            background: rgba(255,255,255,.06);
         }
 
         /* Content */
         .content {
-            padding: 2rem;
+            padding: 24px;
         }
 
         .content-header {
-            margin-bottom: 2rem;
+            margin-bottom: 24px;
         }
 
         .content-title {
             font-size: 1.875rem;
             font-weight: 700;
-            color: var(--gray-900);
+            color: var(--slate-100);
             margin-bottom: 0.5rem;
         }
 
         .content-subtitle {
-            color: var(--gray-600);
+            color: var(--slate-300);
         }
 
         /* Deposits Table */
         .deposits-table {
-            background: white;
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.08);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
             overflow: hidden;
         }
 
         .table-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--gray-200);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
         }
 
         .table-title {
             font-size: 1.25rem;
             font-weight: 600;
-            color: var(--gray-900);
+            color: var(--slate-100);
             margin: 0;
         }
 
@@ -469,27 +477,31 @@ try {
 
         .table th,
         .table td {
-            padding: 1rem 1.5rem;
+            padding: 12px 20px;
             text-align: left;
-            border-bottom: 1px solid var(--gray-100);
+            border-bottom: 1px solid rgba(255,255,255,.05);
         }
 
         .table th {
-            background: var(--gray-50);
+            background: rgba(255,255,255,.03);
             font-weight: 600;
-            color: var(--gray-700);
+            color: var(--slate-300);
             font-size: 0.875rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
+        .table tbody tr {
+            color: var(--slate-200);
+        }
+
         .table tbody tr:hover {
-            background: var(--gray-50);
+            background: rgba(255,255,255,.05);
         }
 
         .deposit-id {
             font-weight: 600;
-            color: var(--gray-900);
+            color: var(--slate-100);
         }
 
         .deposit-amount {
@@ -536,7 +548,7 @@ try {
         .no-deposits {
             text-align: center;
             padding: 3rem;
-            color: var(--gray-500);
+            color: var(--slate-400);
         }
 
         .no-deposits-icon {
@@ -556,18 +568,18 @@ try {
         }
 
         .pagination-btn {
-            padding: 0.5rem 0.75rem;
-            border: 1px solid var(--gray-300);
-            background: white;
-            color: var(--gray-700);
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,.12);
+            background: rgba(255,255,255,.05);
+            color: var(--slate-200);
             text-decoration: none;
             border-radius: 6px;
             transition: all 0.3s;
         }
 
         .pagination-btn:hover {
-            background: var(--gray-50);
-            border-color: var(--gray-400);
+            background: rgba(255,255,255,.08);
+            border-color: var(--teal-500);
         }
 
         .pagination-btn.active {
