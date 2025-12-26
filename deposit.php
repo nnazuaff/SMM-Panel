@@ -1284,7 +1284,7 @@ date_default_timezone_set('Asia/Jakarta');
             box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 9999;
+            z-index: 10500;
             max-width: 400px;
             transform: translateX(100%);
             transition: transform 0.3s ease;
