@@ -2650,7 +2650,8 @@ $sectionTitle = 'Top Up Saldo';
                 const username = acisUsernameInput.value.trim();
                 const phone = phoneNumberInput.value.trim();
                 const email = emailInput.value.trim();
-                const amount = parseFloat(conversionAmountInput.value) || 0;
+                const amountRaw = conversionAmountInput.value.replace(/\./g, '');
+                const amount = parseInt(amountRaw, 10) || 0;
                 
                 // Validate
                 if (!username) {
