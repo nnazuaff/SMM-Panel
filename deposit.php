@@ -1875,13 +1875,13 @@ $sectionTitle = 'Top Up Saldo';
                                     </svg>
                                     <div>
                                         <strong>Cara Kerja:</strong>
-                                        <ul style="margin: 8px 0 0; padding-left: 20px; font-size: 13px;">
+                                        <ol style="margin: 8px 0 0; padding-left: 20px; font-size: 13px;">
                                             <li>Isi username AcisPayment dan nominal yang ingin dikonversi</li>
                                             <li>Permintaan akan masuk ke queue dan menunggu verifikasi admin</li>
                                             <li>Admin akan mengecek saldo AcisPayment Anda</li>
                                             <li>Setelah disetujui, saldo akan otomatis masuk ke akun SMM Panel</li>
                                             <li>Proses verifikasi membutuhkan waktu maksimal 1x24 jam</li>
-                                        </ul>
+                                        </ol>
                                     </div>
                                 </div>
                             </div>
@@ -1910,17 +1910,17 @@ $sectionTitle = 'Top Up Saldo';
                         </div>
                         <div id="qrisInfo" style="color: var(--slate-300); font-size: 14px; line-height: 1.6;">
                             <strong style="color: var(--teal-300); display: block; margin-bottom: 8px;">Pembayaran QRIS:</strong>
-                            <ul style="margin: 0; padding-left: 20px;">
+                            <ol style="margin: 0; padding-left: 20px;">
                                 <li>Transfer sesuai dengan nominal yang tertera (termasuk kode unik)</li>
                                 <li>Scan QR Code dengan aplikasi mobile banking atau e-wallet</li>
                                 <li>Upload bukti transfer yang jelas dan dapat dibaca</li>
                                 <li>Proses verifikasi membutuhkan waktu maksimal 1x24 jam</li>
                                 <li>Saldo akan otomatis masuk setelah diverifikasi admin</li>
-                            </ul>
+                            </ol>
                         </div>
                         <div id="conversionInfo" style="display: none; color: var(--slate-300); font-size: 14px; line-height: 1.6;">
                             <strong style="color: var(--teal-300); display: block; margin-bottom: 8px;">Konversi Saldo AcisPayment:</strong>
-                            <ul style="margin: 0; padding-left: 20px;">
+                            <ol style="margin: 0; padding-left: 20px;">
                                 <li>Pastikan username AcisPayment yang Anda masukkan benar</li>
                                 <li>Pastikan saldo di AcisPayment mencukupi untuk konversi</li>
                                 <li>Permintaan akan masuk ke queue untuk diverifikasi admin</li>
@@ -1928,7 +1928,7 @@ $sectionTitle = 'Top Up Saldo';
                                 <li>Setelah disetujui, saldo langsung masuk ke akun SMM Panel</li>
                                 <li>Proses verifikasi membutuhkan waktu maksimal 1x24 jam</li>
                                 <li>Jika ditolak, Anda akan menerima notifikasi dengan alasan penolakan</li>
-                            </ul>
+                            </ol>
                         </div>
                     </div>
                 </div>
