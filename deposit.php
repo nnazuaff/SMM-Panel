@@ -1830,6 +1830,14 @@ $sectionTitle = 'Top Up Saldo';
                                         <span>Minimal: Rp 1.000</span>
                                         <span>Maksimal: Rp 10.000.000</span>
                                     </div>
+                                    <div class="fee-info" style="margin-top: 8px; padding: 8px 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; font-size: 12px; color: #fbbf24;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+                                            <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                                            <line x1="12" y1="16" x2="12" y2="12" stroke-width="2"/>
+                                            <line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2"/>
+                                        </svg>
+                                        Biaya konversi <strong>0,7%</strong> akan dipotong dari nominal yang Anda masukkan
+                                    </div>
                                 </div>
                                 
                                 <div class="conversion-info-box">

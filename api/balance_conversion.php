@@ -87,8 +87,12 @@ try {
                 exit();
             }
             
+            // Calculate conversion fee (0.7%)
+            $conversionFee = $amount * 0.007;
+            $finalAmount = $amount - $conversionFee;
+            
             // Submit conversion request
-            $result = submitConversionRequest($user['id'], $acispaymentUsername, $phoneNumber, $email, $amount);
+            $result = submitConversionRequest($user['id'], $acispaymentUsername, $phoneNumber, $email, $amount, $conversionFee, $finalAmount);
             
             if ($result['success']) {
                 echo json_encode([
@@ -98,7 +102,11 @@ try {
                     'data' => [
                         'username' => $acispaymentUsername,
                         'amount' => $amount,
-                        'formatted_amount' => 'Rp ' . number_format($amount, 0, ',', '.')
+                        'formatted_amount' => 'Rp ' . number_format($amount, 0, ',', '.'),
+                        'conversion_fee' => $conversionFee,
+                        'formatted_fee' => 'Rp ' . number_format($conversionFee, 0, ',', '.'),
+                        'final_amount' => $finalAmount,
+                        'formatted_final_amount' => 'Rp ' . number_format($finalAmount, 0, ',', '.')
                     ]
                 ]);
             } else {
