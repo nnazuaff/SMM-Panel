@@ -2075,33 +2075,30 @@ try {
             }
             
             .transactions-table td {
-                display: block;
-                padding: 12px 0;
+                display: grid;
+                grid-template-columns: 100px 1fr;
+                gap: 12px;
+                align-items: start;
+                padding: 10px 0;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-                position: relative;
-                padding-left: 120px;
-                min-height: 40px;
             }
             
             .transactions-table td:last-child {
                 border-bottom: none;
+                display: block;
                 text-align: center;
-                padding-left: 0;
                 padding-top: 16px;
             }
             
             /* Add labels before each data */
             .transactions-table td::before {
                 content: attr(data-label);
-                position: absolute;
-                left: 0;
-                top: 12px;
                 font-weight: 600;
                 color: var(--slate-400);
-                font-size: 11px;
+                font-size: 10px;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-                width: 110px;
+                line-height: 1.4;
             }
             
             .transactions-table td:last-child::before {
@@ -2111,20 +2108,23 @@ try {
             /* Styling untuk card items */
             .order-id {
                 font-size: 13px;
-                line-height: 1.3;
+                line-height: 1.5;
                 font-weight: 600;
                 color: var(--teal-300);
+                word-break: break-word;
             }
             
             .service-name {
-                font-size: 14px;
+                font-size: 13px;
                 line-height: 1.5;
+                word-break: break-word;
             }
             
             .order-link {
-                font-size: 13px;
+                font-size: 12px;
                 padding: 4px 10px;
                 word-break: break-all;
+                line-height: 1.4;
             }
             
             .status-badge {
@@ -2136,19 +2136,22 @@ try {
             }
             
             .price-cell {
-                font-size: 14px;
+                font-size: 13px;
                 font-weight: 600;
                 color: var(--teal-300);
+                line-height: 1.5;
             }
             
             .quantity-cell {
-                font-size: 14px;
+                font-size: 13px;
                 font-weight: 600;
+                line-height: 1.5;
             }
             
             .date-cell {
                 font-size: 12px;
-                line-height: 1.4;
+                line-height: 1.5;
+                word-break: break-word;
             }
             
             .btn-detail {
