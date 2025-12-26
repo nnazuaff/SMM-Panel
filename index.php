@@ -36,7 +36,7 @@
 								<div class="stat-label">Pengguna</div>
 							</div>
 							<div class="stat">
-								<div class="stat-number" data-target="100000" data-suffix="+">831</div>
+								<div class="stat-number" data-target="100000" data-suffix="+">981</div>
 								<div class="stat-label">Pesanan</div>
 							</div>
 							<div class="stat">
