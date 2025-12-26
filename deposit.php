@@ -1787,7 +1787,7 @@ $sectionTitle = 'Top Up Saldo';
                                         onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length > 20) this.value = this.value.slice(0,20);"
                                     >
-                                    <div class="input-hint">Nomor HP yang terdaftar di AcisPayment (maks. 20 digit)</div>
+                                    <div class="input-hint">Nomor HP yang terdaftar di AcisPayment</div>
                                 </div>
                                 
                                 <div class="form-group">
