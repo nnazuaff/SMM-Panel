@@ -1391,6 +1391,11 @@ try {
                     </div>
                 </div>
             </header>
+
+            <!-- Content Area - KONTEN UTAMA RIWAYAT DEPOSIT -->
+            <div class="content-area">
+
+                <!-- Filter Section -->
                 <div class="filter-section">
                     <div class="filter-header">
                         <div class="filter-title">
