@@ -1391,15 +1391,6 @@ try {
                     </div>
                 </div>
             </header>
-
-            <!-- Content Area - KONTEN UTAMA RIWAYAT DEPOSIT -->
-            <div class="content-area">
-                <div class="deposit-history-header">
-                    <h2>Riwayat Deposit</h2>
-                    <p>Lihat semua riwayat deposit saldo Anda</p>
-                </div>
-
-                <!-- Filter Section -->
                 <div class="filter-section">
                     <div class="filter-header">
                         <div class="filter-title">
