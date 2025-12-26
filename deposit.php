@@ -828,6 +828,34 @@ $sectionTitle = 'Top Up Saldo';
             transform: scale(0.95);
         }
         
+        .btn-confirm-amount {
+            width: 100%;
+            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 12px;
+            box-shadow: 0 2px 8px rgba(20, 184, 166, 0.2);
+        }
+        
+        .btn-confirm-amount:hover {
+            background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .btn-confirm-amount:active {
+            transform: translateY(0);
+        }
+        
         .unique-code-info {
             color: var(--slate-400);
             font-size: 12px;
@@ -1708,12 +1736,22 @@ $sectionTitle = 'Top Up Saldo';
                                             class="form-input with-prefix" 
                                             placeholder="0" 
                                             inputmode="numeric"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                            oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
                                         >
                                     </div>
                                     <div class="amount-limits">
                                         <span>Minimal: Rp 1.000</span>
                                         <span>Maksimal: Rp 200.000</span>
                                     </div>
+                                    
+                                    <!-- Confirm Amount Button -->
+                                    <button type="button" id="confirmAmountBtn" class="btn-confirm-amount" style="display: none;">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 6px;">
+                                            <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Konfirmasi Nominal & Generate Kode Unik
+                                    </button>
                                 </div>
                                 
                                 <!-- Unique Code Section -->
@@ -2076,6 +2114,7 @@ $sectionTitle = 'Top Up Saldo';
             const uniqueCodeSection = document.getElementById('uniqueCodeSection');
             const finalAmount = document.getElementById('finalAmount');
             const copyAmountBtn = document.getElementById('copyAmountBtn');
+            const confirmAmountBtn = document.getElementById('confirmAmountBtn');
             
             // Conversion elements
             const acisUsernameInput = document.getElementById('acisUsername');
@@ -2114,6 +2153,10 @@ $sectionTitle = 'Top Up Saldo';
                     // Toggle info card
                     document.getElementById('qrisInfo').style.display = 'block';
                     document.getElementById('conversionInfo').style.display = 'none';
+                    // Reset unique code section
+                    uniqueCodeSection.style.display = 'none';
+                    confirmAmountBtn.style.display = 'none';
+                    pendingAmount = 0;
                 }
             });
             
@@ -2128,6 +2171,10 @@ $sectionTitle = 'Top Up Saldo';
                     // Toggle info card
                     document.getElementById('qrisInfo').style.display = 'none';
                     document.getElementById('conversionInfo').style.display = 'block';
+                    // Reset unique code section
+                    uniqueCodeSection.style.display = 'none';
+                    confirmAmountBtn.style.display = 'none';
+                    pendingAmount = 0;
                 }
             });
             
@@ -2202,23 +2249,44 @@ $sectionTitle = 'Top Up Saldo';
             function generateUniqueCode() {
                 const userId = <?= $user['id'] ?? 1 ?>;
                 const timestamp = Date.now();
-                // Generate a 3-digit code based on user ID and current time
-                const code = ((userId * 17 + timestamp % 1000) % 900) + 100;
+                // Generate code between 100-200 for smaller unique code
+                const code = ((userId * 17 + timestamp % 1000) % 101) + 100;
                 return code;
             }
 
-            // Update final amount with unique code
+            // Store base amount and show confirm button instead of auto-generating code
+            let pendingAmount = 0;
+            
             function updateFinalAmount(baseAmount) {
+                pendingAmount = baseAmount;
                 if (baseAmount > 0) {
-                    uniqueCode = generateUniqueCode();
-                    finalAmountWithCode = baseAmount + uniqueCode;
-                    finalAmount.textContent = `Rp ${finalAmountWithCode.toLocaleString('id-ID')}`;
-                    uniqueCodeSection.style.display = 'block';
+                    // Show preview without unique code
+                    uniqueCodeSection.style.display = 'none';
+                    confirmAmountBtn.style.display = 'block';
                 } else {
                     uniqueCodeSection.style.display = 'none';
+                    confirmAmountBtn.style.display = 'none';
                     finalAmountWithCode = 0;
                 }
             }
+            
+            // Generate and display final amount with unique code
+            function confirmAndGenerateCode() {
+                if (pendingAmount > 0) {
+                    uniqueCode = generateUniqueCode();
+                    finalAmountWithCode = pendingAmount + uniqueCode;
+                    finalAmount.textContent = `Rp ${finalAmountWithCode.toLocaleString('id-ID')}`;
+                    uniqueCodeSection.style.display = 'block';
+                    confirmAmountBtn.style.display = 'none';
+                }
+            }
+            
+            // Confirm amount button handler
+            confirmAmountBtn.addEventListener('click', function() {
+                if (pendingAmount > 0) {
+                    confirmAndGenerateCode();
+                }
+            });
 
             // Copy amount to clipboard
             copyAmountBtn.addEventListener('click', function() {
