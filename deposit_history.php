@@ -970,7 +970,12 @@ try {
                                             </td>
                                             <td>
                                                 <span class="deposit-date">
-                                                    <?= date('d/m/Y H:i', strtotime($deposit['created_at'])); ?> WIB
+                                                    <?php
+                                                    // Convert database time to WIB
+                                                    $datetime = new DateTime($deposit['created_at']);
+                                                    $datetime->setTimezone(new DateTimeZone('Asia/Jakarta'));
+                                                    echo $datetime->format('d/m/Y H:i') . ' WIB';
+                                                    ?>
                                                 </span>
                                             </td>
                                         </tr>
