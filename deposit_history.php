@@ -1874,10 +1874,6 @@ try {
                 </div>
 
                 <div class="deposits-table-card">
-                    <div class="table-header">
-                        <h3 class="table-title">Daftar Deposit</h3>
-                    </div>
-
                     <?php if (empty($deposits)): ?>
                         <div class="no-deposits">
                             <svg class="no-deposits-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
