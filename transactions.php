@@ -2035,129 +2035,105 @@ try {
             }
             
             .transactions-table-wrapper {
-                overflow-x: visible;
+                overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 border-radius: 8px;
                 width: 100%;
                 max-width: 100%;
             }
             
-            /* Hide table header on mobile */
-            .transactions-table thead {
-                display: none;
-            }
-            
             .transactions-table {
                 font-size: 13px;
-                width: 100%;
-                display: block;
+                min-width: 700px;
+                width: 700px; /* Fixed width for consistent scrolling */
             }
             
-            .transactions-table tbody {
-                display: block;
-                width: 100%;
-            }
-            
-            /* Convert table rows to cards */
-            .transactions-table tbody tr {
-                display: block;
-                background: rgba(255, 255, 255, 0.03);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                border-radius: 12px;
-                padding: 16px;
-                margin-bottom: 16px;
-                position: relative;
-            }
-            
-            .transactions-table tbody tr:hover {
-                background: rgba(255, 255, 255, 0.05);
-                border-color: rgba(20, 184, 166, 0.3);
-            }
-            
+            .transactions-table th,
             .transactions-table td {
-                display: grid;
-                grid-template-columns: 100px 1fr;
-                gap: 12px;
-                align-items: start;
-                padding: 10px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                padding: 14px 10px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             
-            .transactions-table td:last-child {
-                border-bottom: none;
-                display: block;
-                text-align: center;
-                padding-top: 16px;
-            }
-            
-            /* Add labels before each data */
-            .transactions-table td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: var(--slate-400);
-                font-size: 10px;
-                text-transform: uppercase;
+            .transactions-table th {
+                font-size: 11px;
                 letter-spacing: 0.5px;
-                line-height: 1.4;
-            }
-            
-            .transactions-table td:last-child::before {
-                display: none;
-            }
-            
-            /* Styling untuk card items */
-            .order-id {
-                font-size: 13px;
-                line-height: 1.5;
+                padding: 16px 10px;
                 font-weight: 600;
-                color: var(--teal-300);
-                word-break: break-word;
+            }
+            
+            /* Sesuaikan lebar kolom untuk mobile */
+            .transactions-table th:nth-child(1) { width: 14%; text-align: left; }   /* ID */
+            .transactions-table th:nth-child(2) { width: 26%; text-align: left; }   /* Layanan */
+            .transactions-table th:nth-child(3) { width: 18%; text-align: left; }   /* Target */
+            .transactions-table th:nth-child(4) { width: 9%; text-align: center; }  /* Jumlah */
+            .transactions-table th:nth-child(5) { width: 12%; text-align: right; }  /* Harga */
+            .transactions-table th:nth-child(6) { width: 12%; text-align: center; } /* Status */
+            .transactions-table th:nth-child(7) { width: 14%; text-align: left; }   /* Tanggal */
+            .transactions-table th:nth-child(8) { width: 11%; text-align: center; } /* Aksi */
+            
+            .transactions-table td:nth-child(1) { text-align: left; }
+            .transactions-table td:nth-child(2) { text-align: left; }
+            .transactions-table td:nth-child(3) { text-align: left; }
+            .transactions-table td:nth-child(4) { text-align: center; }
+            .transactions-table td:nth-child(5) { text-align: center; }
+            .transactions-table td:nth-child(6) { text-align: center; }
+            .transactions-table td:nth-child(7) { text-align: left; }
+            .transactions-table td:nth-child(8) { text-align: center; }
+            
+            .order-id {
+                font-size: 12px;
+                line-height: 1.3;
+                font-weight: 500;
             }
             
             .service-name {
                 font-size: 13px;
-                line-height: 1.5;
-                word-break: break-word;
+                max-width: 150px;
+                line-height: 1.4;
             }
             
             .order-link {
                 font-size: 12px;
-                padding: 4px 10px;
-                word-break: break-all;
-                line-height: 1.4;
+                max-width: 120px;
+                padding: 3px 8px;
             }
             
             .status-badge {
-                padding: 6px 12px;
+                padding: 6px 10px;
                 font-size: 11px;
                 letter-spacing: 0.5px;
+                min-width: 70px;
                 font-weight: 500;
-                display: inline-block;
             }
             
             .price-cell {
-                font-size: 13px;
-                font-weight: 600;
-                color: var(--teal-300);
-                line-height: 1.5;
+                font-size: 12px;
+                text-align: center;
+                font-weight: 500;
             }
             
             .quantity-cell {
-                font-size: 13px;
-                font-weight: 600;
-                line-height: 1.5;
+                font-size: 12px;
+                font-weight: 500;
             }
             
             .date-cell {
-                font-size: 12px;
-                line-height: 1.5;
-                word-break: break-word;
+                font-size: 11px;
+                line-height: 1.3;
+            }
+            
+            .action-cell {
+                width: 70px;
+                min-width: 70px;
+                padding: 14px 10px !important;
             }
             
             .btn-detail {
-                width: 42px;
-                height: 42px;
-                padding: 10px;
+                width: 36px;
+                height: 36px;
+                padding: 8px;
             }
             
             .btn-detail svg {
@@ -2854,7 +2830,7 @@ try {
                             <tbody>
                                 <?php foreach ($orders as $order): ?>
                                 <tr>
-                                    <td data-label="ID Pesanan">
+                                    <td>
                                         <div class="order-id">
                                             #<?= htmlspecialchars($order['id'] ?? '???'); ?>
                                             <?php if (!empty($order['provider_order_id']) && $order['provider_order_id'] != $order['id']): ?>
@@ -2862,17 +2838,17 @@ try {
                                             <?php endif; ?>
                                         </div>
                                     </td>
-                                    <td data-label="Layanan">
+                                    <td>
                                         <div class="service-name" title="<?= htmlspecialchars($order['service_name'] ?? 'Layanan ID: ' . ($order['service_id'] ?? 'N/A')); ?>">
                                             <?= htmlspecialchars($order['service_name'] ?? 'Layanan ID: ' . ($order['service_id'] ?? 'N/A')); ?>
                                         </div>
                                     </td>
-                                    <td data-label="Target">
+                                    <td>
                                         <div class="order-link" title="<?= htmlspecialchars($order['link'] ?? 'N/A'); ?>">
                                             <?= htmlspecialchars($order['link'] ?? 'N/A'); ?>
                                         </div>
                                     </td>
-                                    <td data-label="Jumlah">
+                                    <td>
                                         <div class="quantity-cell">
                                             <?php 
                                             $quantity = $order['quantity'] ?? 0;
@@ -2884,7 +2860,7 @@ try {
                                             <?= number_format($quantity, 0, ',', '.'); ?>
                                         </div>
                                     </td>
-                                    <td data-label="Harga">
+                                    <td>
                                         <div class="price-cell">
                                             <?php 
                                             // Try different price columns
@@ -2899,7 +2875,7 @@ try {
                                             Rp <?= number_format($price, 0, ',', '.'); ?>
                                         </div>
                                     </td>
-                                    <td data-label="Status">
+                                    <td>
                                         <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                                             <?php 
                                             $status = strtolower($order['status'] ?? 'pending');
@@ -2947,7 +2923,7 @@ try {
                                             </span>
                                         </div>
                                     </td>
-                                    <td data-label="Tanggal">
+                                    <td>
                                         <div class="date-cell">
                                             <?php if (!empty($order['created_at'])): ?>
                                                 <?php
@@ -2962,7 +2938,7 @@ try {
                                             <?php endif; ?>
                                         </div>
                                     </td>
-                                    <td data-label="Aksi">
+                                    <td>
                                         <div class="action-cell">
                                             <button class="btn-detail" 
                                                 data-order='<?= htmlspecialchars(json_encode($order), ENT_QUOTES, 'UTF-8'); ?>' 
