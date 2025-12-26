@@ -1199,12 +1199,12 @@ try {
             align-items: center;
             justify-content: center;
             gap: 6px;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.5px;
             border: 1px solid transparent;
             min-width: 80px;
             text-align: center;
@@ -1309,7 +1309,7 @@ try {
         
         .date-cell {
             color: var(--slate-300);
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
             letter-spacing: 0.2px;
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -2097,7 +2097,7 @@ try {
             .order-id {
                 font-size: 12px;
                 line-height: 1.3;
-                font-weight: 500;
+                font-weight: 600;
             }
             
             .service-name {
@@ -2117,23 +2117,23 @@ try {
                 font-size: 11px;
                 letter-spacing: 0.5px;
                 min-width: 70px;
-                font-weight: 500;
+                font-weight: 600;
             }
             
             .price-cell {
                 font-size: 12px;
                 text-align: center;
-                font-weight: 500;
+                font-weight: 600;
             }
             
             .quantity-cell {
                 font-size: 12px;
-                font-weight: 500;
+                font-weight: 600;
             }
             
             .date-cell {
                 font-size: 11px;
-                line-height: 1.3;
+                font-weight: 500;
             }
             
             .action-cell {
@@ -2257,7 +2257,7 @@ try {
             
             .order-id {
                 font-size: 11px;
-                font-weight: 500;
+                font-weight: 600;
             }
             
             .service-name {
@@ -2271,23 +2271,23 @@ try {
                 font-size: 10px;
                 letter-spacing: 0.4px;
                 min-width: 65px;
-                font-weight: 500;
+                font-weight: 600;
             }
             
             .price-cell {
                 font-size: 11px;
                 text-align: center;
-                font-weight: 500;
+                font-weight: 600;
             }
             
             .quantity-cell {
                 font-size: 11px;
-                font-weight: 500;
+                font-weight: 600;
             }
             
             .date-cell {
                 font-size: 10px;
-                line-height: 1.3;
+                font-weight: 500;
             }
             
             .action-cell {
@@ -2397,7 +2397,7 @@ try {
             
             .order-id {
                 font-size: 10px;
-                font-weight: 500;
+                font-weight: 600;
             }
             
             .service-name {
@@ -2410,11 +2410,21 @@ try {
                 padding: 4px 7px;
                 font-size: 9px;
                 min-width: 60px;
-                font-weight: 500;
+                font-weight: 600;
             }
             
-            .price-cell, .quantity-cell, .date-cell {
+            .price-cell {
                 font-size: 10px;
+                font-weight: 600;
+            }
+            
+            .quantity-cell {
+                font-size: 10px;
+                font-weight: 600;
+            }
+            
+            .date-cell {
+                font-size: 9px;
                 font-weight: 500;
             }
             
