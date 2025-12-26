@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Include auth and config
+require_once __DIR__ . '/../config/app.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/MedanpediaAPI.php';
 

@@ -9,6 +9,11 @@ if (!defined('APP_TIMEZONE')) {
 // Set timezone global (aman dipanggil berkali-kali)
 @date_default_timezone_set(APP_TIMEZONE);
 
+// Debug mode
+if (!defined('APP_DEBUG')) {
+    define('APP_DEBUG', false); // Set true untuk development
+}
+
 // Helper optional untuk format tanggal WIB
 if (!function_exists('format_wib')) {
     function format_wib(string $mysqlTs, string $fmt = 'd/m/Y H:i') : string {
