@@ -543,8 +543,10 @@ try {
         /* Content Area */
         .content-area {
             padding: 24px;
-            max-width: 1200px;
+            max-width: 1800px; /* Increased from 1200px */
             margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         /* DEPOSIT HISTORY SPECIFIC STYLES */
