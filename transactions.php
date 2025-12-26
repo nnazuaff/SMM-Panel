@@ -2075,31 +2075,33 @@ try {
             }
             
             .transactions-table td {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                padding: 10px 0;
+                display: block;
+                padding: 12px 0;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-                white-space: normal;
-                word-wrap: break-word;
+                position: relative;
+                padding-left: 120px;
+                min-height: 40px;
             }
             
             .transactions-table td:last-child {
                 border-bottom: none;
-                justify-content: center;
+                text-align: center;
+                padding-left: 0;
                 padding-top: 16px;
             }
             
             /* Add labels before each data */
             .transactions-table td::before {
                 content: attr(data-label);
+                position: absolute;
+                left: 0;
+                top: 12px;
                 font-weight: 600;
                 color: var(--slate-400);
                 font-size: 11px;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-                min-width: 100px;
-                flex-shrink: 0;
+                width: 110px;
             }
             
             .transactions-table td:last-child::before {
@@ -2117,16 +2119,12 @@ try {
             .service-name {
                 font-size: 14px;
                 line-height: 1.5;
-                flex: 1;
-                text-align: right;
             }
             
             .order-link {
                 font-size: 13px;
                 padding: 4px 10px;
                 word-break: break-all;
-                text-align: right;
-                flex: 1;
             }
             
             .status-badge {
@@ -2141,22 +2139,16 @@ try {
                 font-size: 14px;
                 font-weight: 600;
                 color: var(--teal-300);
-                text-align: right;
-                flex: 1;
             }
             
             .quantity-cell {
                 font-size: 14px;
                 font-weight: 600;
-                text-align: right;
-                flex: 1;
             }
             
             .date-cell {
                 font-size: 12px;
                 line-height: 1.4;
-                text-align: right;
-                flex: 1;
             }
             
             .btn-detail {
