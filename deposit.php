@@ -2183,7 +2183,14 @@ $sectionTitle = 'Top Up Saldo';
                 const phone = phoneNumberInput.value.trim();
                 const email = emailInput.value.trim();
                 const amountRaw = conversionAmountInput.value.replace(/\./g, '');
-                const amount = parseInt(amountRaw) || 0;
+                const amount = parseInt(amountRaw, 10);
+                
+                console.log('Validating amount:', {
+                    original: conversionAmountInput.value,
+                    raw: amountRaw,
+                    parsed: amount,
+                    isNaN: isNaN(amount)
+                });
                 
                 // Clear previous errors
                 clearConversionErrors();
@@ -2221,7 +2228,7 @@ $sectionTitle = 'Top Up Saldo';
                 }
                 
                 // Amount validation
-                if (amount === 0 || isNaN(amount)) {
+                if (!amountRaw || amount === 0 || isNaN(amount)) {
                     isValid = false;
                     conversionSummary.style.display = 'none';
                 } else if (amount < 1000) {
