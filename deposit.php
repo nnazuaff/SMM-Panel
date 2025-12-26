@@ -1219,37 +1219,17 @@ date_default_timezone_set('Asia/Jakarta');
             font-size: 14px;
             font-weight: 500;
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            letter-spacing: 0.3px;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.15s ease;
             display: flex;
             align-items: center;
             gap: 8px;
             position: relative;
-            overflow: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        
-        .qris-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        
-        .qris-btn:hover::before {
-            opacity: 1;
+            border: none;
         }
         
         .qris-btn:active {
-            transform: scale(0.98);
-            transition: transform 0.1s ease;
+            transform: translateY(1px);
         }
         
         .qris-btn-cancel {
@@ -1260,19 +1240,19 @@ date_default_timezone_set('Asia/Jakarta');
         
         .qris-btn-cancel:hover {
             background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--slate-200);
         }
         
         .qris-btn-confirm {
-            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
-            border: none;
+            background: var(--teal-500);
             color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
         }
         
         .qris-btn-confirm:hover {
-            background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
-            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+            background: var(--teal-600);
+            box-shadow: 0 2px 6px rgba(20, 184, 166, 0.25);
         }
         
         .qris-btn-confirm:disabled {
@@ -1280,10 +1260,17 @@ date_default_timezone_set('Asia/Jakarta');
             color: var(--slate-400);
             cursor: not-allowed;
             box-shadow: none;
+            opacity: 0.6;
         }
         
-        .qris-btn-confirm:disabled::before {
-            display: none;
+        .qris-btn-confirm:disabled:hover {
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: none;
+            transform: none;
+        }
+        
+        .qris-btn-confirm:disabled:active {
+            transform: none;
         }
         
         /* Notifications */
