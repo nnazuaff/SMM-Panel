@@ -1337,7 +1337,7 @@ try {
             
             .deposit-status {
                 font-size: 11px;
-                padding: 3px 10px;
+                padding: 6px 10px;
             }
             
             .deposit-date {
@@ -1358,7 +1358,7 @@ try {
             }
             
             .no-deposits {
-                padding: 40px 20px;
+                padding: 50px 20px;
             }
         }
         
@@ -1390,12 +1390,12 @@ try {
             
             .deposits-table th,
             .deposits-table td {
-                padding: 10px 8px;
+                padding: 12px 8px;
             }
             
             .deposits-table th {
                 font-size: 10px;
-                padding: 12px 8px;
+                padding: 14px 8px;
             }
             
             .deposit-id {
@@ -1417,7 +1417,7 @@ try {
             
             .deposit-status {
                 font-size: 10px;
-                padding: 2px 8px;
+                padding: 5px 8px;
             }
             
             .deposit-date {
@@ -1436,7 +1436,7 @@ try {
             }
             
             .no-deposits {
-                padding: 35px 16px;
+                padding: 40px 16px;
             }
             
             .no-deposits-icon {
@@ -1478,12 +1478,12 @@ try {
             
             .deposits-table th,
             .deposits-table td {
-                padding: 10px 7px;
+                padding: 12px 7px;
             }
             
             .deposits-table th {
                 font-size: 10px;
-                padding: 12px 7px;
+                padding: 14px 7px;
             }
             
             .deposit-id {
@@ -1505,7 +1505,7 @@ try {
             
             .deposit-status {
                 font-size: 9px;
-                padding: 2px 7px;
+                padding: 4px 7px;
             }
             
             .deposit-date {
@@ -1520,7 +1520,7 @@ try {
             }
             
             .no-deposits {
-                padding: 30px 14px;
+                padding: 35px 14px;
             }
             
             .no-deposits-text {
