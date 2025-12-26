@@ -328,6 +328,18 @@ function showServiceDetail(id, name, price, min, max, avgTime, category, refill)
 
 // Function to buy service - redirect to order page with selected service
 function buyService(serviceId, serviceName) {
+    // Check if user is logged in by checking if userNav exists (PHP variable)
+    const isLoggedIn = <?php echo json_encode(isset($_SESSION['user']) && $_SESSION['user']); ?>;
+    
+    if (!isLoggedIn) {
+        // Redirect to login page with return URL
+        const loginUrl = new URL('auth/login.php', window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/'));
+        loginUrl.searchParams.set('return', window.location.pathname + window.location.search);
+        loginUrl.searchParams.set('message', 'Silakan login terlebih dahulu untuk melakukan pemesanan');
+        window.location.href = loginUrl.toString();
+        return;
+    }
+    
     // Create URL with service parameters
     const orderUrl = new URL('order.php', window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/'));
     orderUrl.searchParams.set('service_id', serviceId);

@@ -16,21 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/MedanpediaAPI.php';
 
-// Check authentication
-if (!auth_check()) {
-    http_response_code(401);
-    echo json_encode([
-        'success' => false, 
-        'message' => 'Unauthorized - Please login first',
-        'debug' => [
-            'session_status' => session_status(),
-            'session_id' => session_id(),
-            'user_session' => isset($_SESSION['user']) ? 'exists' : 'missing'
-        ]
-    ]);
-    exit();
-}
-
 try {
     // Handle both GET and POST requests
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -38,6 +23,22 @@ try {
         $action = $input['action'] ?? '';
     } else {
         $action = $_GET['action'] ?? 'get_services';
+    }
+
+    // Check authentication untuk semua action kecuali get_services
+    // get_services bisa diakses publik agar halaman services.php bisa dibuka tanpa login
+    if ($action !== 'get_services' && !auth_check()) {
+        http_response_code(401);
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Unauthorized - Please login first',
+            'debug' => [
+                'session_status' => session_status(),
+                'session_id' => session_id(),
+                'user_session' => isset($_SESSION['user']) ? 'exists' : 'missing'
+            ]
+        ]);
+        exit();
     }
 
     switch ($action) {
