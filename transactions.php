@@ -1530,6 +1530,8 @@ try {
             .detail-value {
                 font-size: 13px;
                 word-break: break-word;
+                flex-wrap: wrap;
+                gap: 6px;
             }
             
             .detail-value.highlight {
@@ -1537,14 +1539,14 @@ try {
             }
             
             .copy-btn {
-                padding: 3px 6px;
-                font-size: 10px;
-                margin-left: 4px;
+                padding: 5px 6px;
+                min-width: 28px;
+                height: 28px;
             }
             
             .copy-btn svg {
-                width: 12px;
-                height: 12px;
+                width: 14px;
+                height: 14px;
             }
             
             .detail-status {
@@ -1591,6 +1593,17 @@ try {
             .detail-value.highlight {
                 font-size: 11px;
             }
+            
+            .copy-btn {
+                padding: 4px 5px;
+                min-width: 26px;
+                height: 26px;
+            }
+            
+            .copy-btn svg {
+                width: 12px;
+                height: 12px;
+            }
         }
         
         .detail-grid {
@@ -1617,6 +1630,10 @@ try {
             color: var(--slate-100);
             font-weight: 500;
             word-break: break-all;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         
         .detail-value.highlight {
@@ -1639,25 +1656,36 @@ try {
         }
         
         .copy-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(20, 184, 166, 0.1);
+            border: 1px solid rgba(20, 184, 166, 0.2);
             border-radius: 6px;
-            padding: 6px 10px;
-            color: var(--slate-300);
+            padding: 6px 8px;
+            color: var(--teal-400);
             cursor: pointer;
             font-size: 12px;
-            margin-left: 8px;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            min-width: 32px;
+            height: 32px;
         }
         
         .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(20, 184, 166, 0.2);
+            border-color: rgba(20, 184, 166, 0.4);
             color: var(--teal-300);
+            transform: translateY(-1px);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(0);
         }
         
         .copy-btn svg {
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             stroke: currentColor;
             fill: none;
             stroke-width: 2;
