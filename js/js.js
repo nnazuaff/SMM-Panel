@@ -85,16 +85,9 @@
 
 // ===== Realtime Balance Updater =====
 (function(){
-	// Cek apakah user sudah login dengan melihat keberadaan elemen yang hanya ada di halaman logged-in
-	function isUserLoggedIn() {
-		// Cek apakah ada elemen balance atau header yang menandakan user sudah login
-		return document.querySelector('[data-balance]') !== null || 
-		       document.querySelector('.balance-info') !== null ||
-		       document.body.classList.contains('logged-in');
-	}
-
 	// Jika user belum login, skip semua fungsi balance updater
-	if (!isUserLoggedIn()) {
+	// Menggunakan variable global dari PHP yang di-inject di header
+	if (typeof window.isUserLoggedIn === 'undefined' || !window.isUserLoggedIn) {
 		return;
 	}
 
