@@ -2175,7 +2175,6 @@ date_default_timezone_set('Asia/Jakarta');
                     document.getElementById('conversionInfo').style.display = 'none';
                     // Reset unique code section
                     uniqueCodeSection.style.display = 'none';
-                    confirmAmountBtn.style.display = 'none';
                     pendingAmount = 0;
                 }
             });
@@ -2193,7 +2192,6 @@ date_default_timezone_set('Asia/Jakarta');
                     document.getElementById('conversionInfo').style.display = 'block';
                     // Reset unique code section
                     uniqueCodeSection.style.display = 'none';
-                    confirmAmountBtn.style.display = 'none';
                     pendingAmount = 0;
                 }
             });

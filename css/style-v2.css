@@ -965,7 +965,6 @@ label.field { display:flex; }
 	outline: none !important; 
 	-webkit-tap-highlight-color: transparent !important;
 	-webkit-focus-ring-color: transparent !important;
-	-moz-outline: none !important;
 }
 *:focus { 
 	outline: none !important; 
