@@ -37,7 +37,7 @@ if (!isset($basePrefix)) {
         </div>
     </div>
 </footer>
-<script src="<?= $basePrefix ?>js/js.js?v=20250816"></script>
+<script src="<?= $basePrefix ?>js/js.js?v=20250827"></script>
 <?php if(isset($activePage) && $activePage==='services'): ?>
 <script>
 (function(){
