@@ -1826,7 +1826,7 @@ date_default_timezone_set('Asia/Jakarta');
                                         class="form-input" 
                                         placeholder="email@example.com"
                                         required
-                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}"
                                     >
                                     <div class="input-hint">Email yang terdaftar di AcisPayment</div>
                                 </div>
@@ -2205,13 +2205,6 @@ date_default_timezone_set('Asia/Jakarta');
                 const email = emailInput.value.trim();
                 const amountRaw = conversionAmountInput.value.replace(/\./g, '');
                 const amount = parseInt(amountRaw, 10);
-                
-                console.log('Validating amount:', {
-                    original: conversionAmountInput.value,
-                    raw: amountRaw,
-                    parsed: amount,
-                    isNaN: isNaN(amount)
-                });
                 
                 // Clear previous errors
                 clearConversionErrors();
