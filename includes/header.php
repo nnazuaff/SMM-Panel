@@ -11,7 +11,7 @@ $inAuth = (strpos($scriptDir, '/auth') !== false);
 // Jika file yang diminta (REQUEST_URI) mengandung /auth/ maka butuh prefix '../'
 // Menggunakan pola sederhana: kalau folder saat ini bukan root project (index.php) maka naik satu level
 $basePrefix = $inAuth ? '../' : '';
-$assetVer = '20250817w'; // Explicit centering with auth-wrapper and better margins
+$assetVer = '20250827b'; // Fixed moz-outline CSS warning
 ?>
 <!DOCTYPE html>
 <html lang="id">
