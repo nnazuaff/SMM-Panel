@@ -141,7 +141,13 @@
 	var balanceInterval = setInterval(fetchBalance, 15000);
 
 	// Fetch awal setelah page load stabil
-	window.addEventListener('load', ()=> setTimeout(fetchBalance, 800));
+	window.addEventListener('load', ()=> setTimeout(()=>{
+		fetchBalance();
+		// Jika polling sudah dihentikan (karena 401), pastikan interval tidak jalan
+		if (typeof balanceInterval !== 'undefined' && !balanceInterval) {
+			clearInterval(balanceInterval);
+		}
+	}, 800));
 
 	// Listener custom event: saat order sukses dari form JS lain bisa dispatch event ini
 	window.addEventListener('order:created', ()=> fetchBalance());
