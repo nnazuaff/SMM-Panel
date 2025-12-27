@@ -34,9 +34,6 @@ $assetVer = '20250817w'; // Explicit centering with auth-wrapper and better marg
     
     
     <script>/* flag JS enabled early */document.documentElement.classList.add('js');</script>
-    <script>/* Expose login state to client scripts */
-        window.IS_LOGGED_IN = <?= json_encode(!!$userNav) ?>;
-    </script>
     <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>

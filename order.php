@@ -1550,7 +1550,7 @@ require_once __DIR__ . '/api/MedanpediaAPI.php';
             try {
                 showAlert('info', 'Memuat kategori layanan...', false);
                 
-                const response = await fetch('<?= $basePrefix ?>api/services.php', {
+                const response = await fetch('api/services.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -2005,7 +2005,7 @@ require_once __DIR__ . '/api/MedanpediaAPI.php';
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Memproses...';
                 
-                const response = await fetch('<?= $basePrefix ?>api/order.php', {
+                const response = await fetch('api/order.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

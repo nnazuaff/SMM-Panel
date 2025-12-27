@@ -90,10 +90,6 @@
 		'.stat-card-value' // kemungkinan card ringkasan saldo
 	];
 
-	// Jika halaman tidak menampilkan elemen saldo, hentikan agar tidak memanggil API (menghindari 401 pada halaman publik)
-	const hasBalanceTarget = !!document.querySelector('[data-balance], .balance-info, .stat-card-value');
-	if(!hasBalanceTarget) return;
-
 	function formatRupiah(num){
 		return new Intl.NumberFormat('id-ID').format(Math.floor(num));
 	}
@@ -122,9 +118,8 @@
 		if(inFlight) return; // hindari overlap
 		inFlight = true;
 		try {
-			const apiRoot = (typeof window.API_ROOT !== 'undefined') ? window.API_ROOT : 'api';
-		const res = await fetch(apiRoot + '/balance.php', {cache:'no-store'});		// Jika user tidak terautentikasi, server mungkin mengembalikan 401/403 — abaikan tanpa melempar error
-		if(res.status === 401 || res.status === 403) return;			if(!res.ok) throw new Error('HTTP '+res.status);
+			const res = await fetch('api/balance.php', {cache:'no-store'});
+			if(!res.ok) throw new Error('HTTP '+res.status);
 			const data = await res.json();
 			if(data && data.success){
 				if(lastValue === null || lastValue !== data.balance){

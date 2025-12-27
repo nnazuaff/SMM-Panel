@@ -37,10 +37,6 @@ if (!isset($basePrefix)) {
         </div>
     </div>
 </footer>
-<script>/* App base prefix for client-side API calls */
-    window.APP_BASE_PREFIX = <?= json_encode($basePrefix) ?>;
-    window.API_ROOT = (window.APP_BASE_PREFIX || '') + 'api';
-</script>
 <script src="<?= $basePrefix ?>js/js.js?v=20250816"></script>
 <?php if(isset($activePage) && $activePage==='services'): ?>
 <script>

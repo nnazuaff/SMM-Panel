@@ -2569,7 +2569,7 @@ date_default_timezone_set('Asia/Jakarta');
                 
                 try {
                     // Send deposit request to API
-                    const response = await fetch('<?= $basePrefix ?>api/deposit.php', {
+                    const response = await fetch('api/deposit.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -2755,7 +2755,7 @@ date_default_timezone_set('Asia/Jakarta');
                 submitBtnText.textContent = 'Mengirim...';
                 
                 try {
-                    const response = await fetch('<?= $basePrefix ?>api/balance_conversion.php', {
+                    const response = await fetch('api/balance_conversion.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
