@@ -85,6 +85,19 @@
 
 // ===== Realtime Balance Updater =====
 (function(){
+	// Cek apakah user sudah login dengan melihat keberadaan elemen yang hanya ada di halaman logged-in
+	function isUserLoggedIn() {
+		// Cek apakah ada elemen balance atau header yang menandakan user sudah login
+		return document.querySelector('[data-balance]') !== null || 
+		       document.querySelector('.balance-info') !== null ||
+		       document.body.classList.contains('logged-in');
+	}
+
+	// Jika user belum login, skip semua fungsi balance updater
+	if (!isUserLoggedIn()) {
+		return;
+	}
+
 	const BALANCE_SELECTOR_LIST = [
 		'.balance-info', // container yang berisi teks "Saldo:" (akan kita parse & update bagian nominal)
 		'.stat-card-value' // kemungkinan card ringkasan saldo
@@ -128,7 +141,7 @@
 				}
 			}
 		} catch(e){
-			// Silent; bisa tambahkan console.debug jika perlu
+
 		} finally { inFlight = false; }
 	}
 
