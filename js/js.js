@@ -118,7 +118,8 @@
 		if(inFlight) return; // hindari overlap
 		inFlight = true;
 		try {
-			const res = await fetch('api/balance.php', {cache:'no-store'});
+			const apiRoot = (typeof window.API_ROOT !== 'undefined') ? window.API_ROOT : 'api';
+		const res = await fetch(apiRoot + '/balance.php', {cache:'no-store'});
 			if(!res.ok) throw new Error('HTTP '+res.status);
 			const data = await res.json();
 			if(data && data.success){
