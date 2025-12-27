@@ -119,11 +119,6 @@
 		inFlight = true;
 		try {
 			const res = await fetch('api/balance.php', {cache:'no-store'});
-			if(res.status === 401) {
-				// Jika belum login, stop polling balance
-				if (balanceInterval) clearInterval(balanceInterval);
-				return;
-			}
 			if(!res.ok) throw new Error('HTTP '+res.status);
 			const data = await res.json();
 			if(data && data.success){
@@ -138,16 +133,10 @@
 	}
 
 	// Polling setiap 15 detik (cukup jarang agar ringan)
-	var balanceInterval = setInterval(fetchBalance, 15000);
+	setInterval(fetchBalance, 15000);
 
 	// Fetch awal setelah page load stabil
-	window.addEventListener('load', ()=> setTimeout(()=>{
-		fetchBalance();
-		// Jika polling sudah dihentikan (karena 401), pastikan interval tidak jalan
-		if (typeof balanceInterval !== 'undefined' && !balanceInterval) {
-			clearInterval(balanceInterval);
-		}
-	}, 800));
+	window.addEventListener('load', ()=> setTimeout(fetchBalance, 800));
 
 	// Listener custom event: saat order sukses dari form JS lain bisa dispatch event ini
 	window.addEventListener('order:created', ()=> fetchBalance());
